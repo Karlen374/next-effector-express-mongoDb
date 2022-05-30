@@ -1,0 +1,51 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "airbnb-typescript/base"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },   
+        "project": "./tsconfig.json",
+        "tsconfigRootDir": "client",   
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+       
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/function-component-definition": [
+            2,
+            {
+              "namedComponents": "arrow-function",
+              "unnamedComponents": "arrow-function"
+            }
+          ],
+        "arrow-body-style": "off",
+        "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+        "linebreak-style": "off",
+        // "@typescript-eslint/no-unnecessary-type-assertion": 2,
+        "no-plusplus": 0,
+        "global-require": 0,
+        "react/jsx-props-no-spreading": "off",
+        "max-len":["error",{"code":120}],
+        "jsx-a11y/anchor-is-valid":"off",
+         "import/extensions":"off",
+         "import/no-unresolved": "off",
+         "react/prefer-stateless-function":"off",
+         "no-else-return":"off",
+         "import/prefer-default-export": "off",
+         "no-param-reassign": 0
+    }
+}

@@ -1,0 +1,18 @@
+.Car_List{
+  &__Header{
+  padding:40px 70px;
+  background-color:  #add7ef;
+  }
+  &__Btn{
+    background-color: #fff;
+    padding: 5px 15px;
+    border:1px solid black;
+    border-radius:10px;
+    color:#26395d;
+    &:hover{
+      background-color: #26395d;
+      color:#F4EACE;
+      
+    }
+  }
+}
