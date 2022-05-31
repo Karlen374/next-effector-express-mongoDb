@@ -13,9 +13,21 @@ export const addCar = createEffect(async (car:ICar) => {
   return req.json();
 });
 
+export const checkPendingError = createEvent<boolean>();
+
+export const $Alert = createStore<boolean>(false)
+  .on(checkPendingError, (_, pending) => pending);
+
+addCar.failData.watch(() => {
+  checkPendingError(true);
+  setTimeout(() => {
+    checkPendingError(false);
+  }, 2000);
+});
+
 export const pendingData = createEvent<boolean>();
 
-export const $Loader = createStore(false)
+export const $Loader = createStore<boolean>(false)
   .on(pendingData, (_, pending) => pending);
 
 addCar.pending.watch((pending) => {
@@ -32,6 +44,17 @@ export const saveEditCar = createEffect(async (editCar:ICar) => {
     },
   });
   return req.json();
+});
+
+saveEditCar.pending.watch((pending) => {
+  pendingData(pending);
+});
+
+saveEditCar.failData.watch(() => {
+  checkPendingError(true);
+  setTimeout(() => {
+    checkPendingError(false);
+  }, 2000);
 });
 
 export const changeLiked = createEffect(async (id:string) => {
@@ -68,17 +91,34 @@ export const $cars = createStore<ICar[]>([])
   .on(loadCars, (_, carsFromApi:ICar[]) => {
     return carsFromApi;
   })
+
   .on(saveEditCar.doneData, (cars, editCar) => {
-    return [...cars, editCar];
+    const data = cars.map((item) => {
+      if (item.id === editCar.id) {
+        return editCar;
+      } else return item;
+    });
+    return data;
   })
+
   .on(addCar.doneData, (cars, newCar) => {
     return [...cars, newCar];
   })
 
   .on(changeLiked.doneData, (cars, likeCar) => {
-    return [...cars, likeCar];
+    const data = cars.map((item) => {
+      if (item.id === likeCar.id) {
+        return likeCar;
+      } else return item;
+    });
+    return data;
   })
 
   .on(changeViewedCar.doneData, (cars, viewedCar) => {
-    return [...cars, viewedCar];
+    const data = cars.map((item) => {
+      if (item.id === viewedCar.id) {
+        return viewedCar;
+      } else return item;
+    });
+    return data;
   });

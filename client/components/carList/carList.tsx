@@ -10,7 +10,6 @@ import { $modal } from '../../models/modal/modal';
 const CarList = () => {
   const cars = useStore($viewedCars) || [];
   const modal = useStore($modal);
-
   return (
     <div>
 

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
-// import { useStore } from 'effector-react';
 import MainLayout from '../layouts/MainLayout';
 import CarList from '../components/carList/carList';
 import CarListHeader from '../components/carListHeader/carListHeader';
@@ -9,20 +8,20 @@ import { ICar } from '../types/ICar';
 
 export async function getStaticProps() {
   const res = await fetch('http://localhost:5000/api/cars');
-  const cars = await res.json();
+  const data = await res.json();
   return {
     props: {
-      cars,
+      data,
     },
   };
 }
 
 interface IndexPage {
-  cars:ICar[]
+  data:ICar[]
 }
-const Index = ({ cars }:IndexPage) => {
+const Index = ({ data }:IndexPage) => {
   useEffect(() => {
-    loadCars(cars);
+    loadCars(data);
   }, []);
 
   return (

@@ -12,9 +12,10 @@ interface CarInfoProps {
 }
 const CarInfo = ({ car }:CarInfoProps) => {
   const [carInfo, setCarInfo] = useState<ICar>();
-  const [liked, setLiked] = useState<Boolean>(car.liked);
+  const [liked, setLiked] = useState<Boolean>();
   useEffect(() => {
     setCarInfo(car);
+    setLiked(car.liked);
   }, [car]);
 
   const changeCarLike = () => {
