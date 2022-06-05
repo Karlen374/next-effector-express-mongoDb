@@ -6,7 +6,7 @@ import { useStore } from 'effector-react';
 import styles from './appHeader.module.scss';
 import { changeViewedModal } from '../../models/modal/modal';
 import { setSelectEditCar } from '../../models/editCar/editCar';
-import { $Alert } from '../../models/cars/cars';
+import { $Alert } from '../../models/errorAlert/errorAlert';
 
 const AppHeader = () => {
   const alert = useStore($Alert);

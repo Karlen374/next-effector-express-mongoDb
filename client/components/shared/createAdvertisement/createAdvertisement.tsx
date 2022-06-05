@@ -10,28 +10,16 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useStore } from 'effector-react';
 import Modal from '../modal/modal';
-import { OptionType } from './OptionType';
 import styles from './createAdvertisement.module.scss';
 import { addCar, saveEditCar } from '../../../models/cars/cars';
 import { ICar } from '../../../types/ICar';
 import { changeViewedModal } from '../../../models/modal/modal';
 import { $selectedCar } from '../../../models/editCar/editCar';
-
-const brands: readonly OptionType[] = [
-  { title: 'BMW' },
-  { title: 'Ferrari' },
-  { title: 'Volvo' },
-];
-const models: readonly OptionType[] = [
-  { title: 'x5' },
-  { title: 's60' },
-  { title: 'enzo' },
-  { title: 'm5' },
-];
+import { $models, getModelsForAutocomplete, addNewModelInAutocomplete } from '../../../models/Autocomplete/models';
+import { $brands, getBrandsForAutocomplete, addNewBrandInAutocomplete } from '../../../models/Autocomplete/brands';
 
 interface CustomProps {
   onChange: (event: { target: { value: string } }) => void;
-
 }
 
 const NumberFormatCustom = forwardRef<ForwardRefExoticComponent<CustomProps & RefAttributes<any>>, CustomProps>(
@@ -58,11 +46,13 @@ const NumberFormatCustom = forwardRef<ForwardRefExoticComponent<CustomProps & Re
 
 const CreateAdvertisement = () => {
   const selectedCar = useStore($selectedCar);
+  const models = useStore($models);
+  const brands = useStore($brands);
 
   const [releaseYear, setReleaseYear] = useState<number | string>('');
   const [price, setPrice] = useState<string>('');
-  const [brand, setBrand] = useState<OptionType | string>('');
-  const [model, setModel] = useState<OptionType | string>('');
+  const [brand, setBrand] = useState<string>('');
+  const [model, setModel] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
 
@@ -76,6 +66,14 @@ const CreateAdvertisement = () => {
     }
   }, []);
 
+  useEffect(() => {
+    getModelsForAutocomplete(model);
+  }, [model]);
+
+  useEffect(() => {
+    getBrandsForAutocomplete(brand);
+  }, [brand]);
+
   const changeDescription = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
@@ -83,7 +81,12 @@ const CreateAdvertisement = () => {
   const changePrice = (e:React.ChangeEvent<HTMLInputElement>):void => {
     setPrice(e.target.value);
   };
-
+  const changeModel = (e:React.ChangeEvent<HTMLInputElement>):void => {
+    setModel(e.target.value);
+  };
+  const changeBrand = (e:React.ChangeEvent<HTMLInputElement>):void => {
+    setBrand(e.target.value);
+  };
   const changeReleaseYear = (e:React.ChangeEvent<HTMLInputElement>):void => {
     setReleaseYear(e.target.value);
   };
@@ -94,23 +97,7 @@ const CreateAdvertisement = () => {
     } else changeViewedModal();
   };
 
-  const getOptionLabel = (option: string | OptionType) => {
-    if (typeof option === 'string') {
-      return option;
-    }
-
-    if (option.inputValue) {
-      return option.inputValue;
-    }
-
-    return option.title;
-  };
-
   const saveDataCar = () => {
-    const updBrand = (typeof brand === 'string') ? brand : brand.title;
-
-    const updModel = (typeof model === 'string') ? model : model.title;
-
     let upPrice = '';
 
     for (let i = 0; i < price.length; i++) {
@@ -121,15 +108,16 @@ const CreateAdvertisement = () => {
 
     const car: ICar = {
       id: index,
-      brand: updBrand,
-      model: updModel,
+      brand,
+      model,
       price: +upPrice,
       releaseYear: +releaseYear,
       description,
       viewed: false,
       liked: false,
     };
-
+    addNewModelInAutocomplete(model);
+    addNewBrandInAutocomplete(brand);
     if (!selectedCar) addCar(car);
     else saveEditCar(car);
     changeViewedModal();
@@ -175,7 +163,6 @@ const CreateAdvertisement = () => {
 
       <div className={styles.Add_Form}>
         {modalHeader}
-
         <Grid container spacing={2}>
 
           <Grid item lg={6} md={6} sm={6} xs={12}>
@@ -204,70 +191,25 @@ const CreateAdvertisement = () => {
 
           <Grid item lg={6} md={6} sm={6} xs={12}>
             <Autocomplete
-              value={brand}
-              onChange={(event, newValue) => {
-                if (typeof newValue === 'string') {
-                  setBrand({
-                    title: newValue,
-                  });
-                } else if (newValue && newValue.inputValue) {
-                  setBrand({
-                    title: newValue.inputValue,
-                  });
-                } else {
-                  setBrand('');
-                }
-              }}
-              selectOnFocus
-              autoSelect
-              id="free-solo-with-text-demo"
-              options={brands}
-              getOptionLabel={(option) => getOptionLabel(option)}
-              renderOption={(props, option) => {
-                if (typeof option !== 'string') return <li {...props}>{option.title}</li>;
-                else return null;
-              }}
+              id="free-solo-demo"
               freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Марка" />
-              )}
+              options={brands?.map((option) => option.brand)}
+              renderInput={(params) => <TextField {...params} value={brand} onChange={changeBrand} label="Модель" />}
             />
           </Grid>
+
           <Grid item lg={6} md={6} sm={6} xs={12}>
             <Autocomplete
-              value={model}
-              onChange={(event, newValue) => {
-                if (typeof newValue === 'string') {
-                  setModel({
-                    title: newValue,
-                  });
-                } else if (newValue && newValue.inputValue) {
-                  setModel({
-                    title: newValue.inputValue,
-                  });
-                } else {
-                  setModel('');
-                }
-              }}
-              autoSelect
-              selectOnFocus
-              id="free-solo-with-text-demo"
-              options={models}
-              getOptionLabel={(option) => getOptionLabel(option)}
-              renderOption={(props, option) => {
-                if (typeof option !== 'string') return <li {...props}>{option.title}</li>;
-                else return null;
-              }}
+              id="free-solo-demo"
               freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Модель" />
-              )}
+              options={models?.map((option) => option.model)}
+              renderInput={(params) => <TextField {...params} value={model} onChange={changeModel} label="Модель" />}
             />
           </Grid>
 
         </Grid>
-        <div className={styles.Add_Form__textarea}>
 
+        <div className={styles.Add_Form__textarea}>
           <TextareaAutosize
             minRows={4}
             placeholder="Описание машины"
@@ -275,7 +217,6 @@ const CreateAdvertisement = () => {
             value={description}
             onChange={changeDescription}
           />
-
         </div>
 
         <div className={styles.Add_Form__Button}>

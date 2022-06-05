@@ -13,27 +13,6 @@ export const addCar = createEffect(async (car:ICar) => {
   return req.json();
 });
 
-export const checkPendingError = createEvent<boolean>();
-
-export const $Alert = createStore<boolean>(false)
-  .on(checkPendingError, (_, pending) => pending);
-
-addCar.failData.watch(() => {
-  checkPendingError(true);
-  setTimeout(() => {
-    checkPendingError(false);
-  }, 2000);
-});
-
-export const pendingData = createEvent<boolean>();
-
-export const $Loader = createStore<boolean>(false)
-  .on(pendingData, (_, pending) => pending);
-
-addCar.pending.watch((pending) => {
-  pendingData(pending);
-});
-
 export const saveEditCar = createEffect(async (editCar:ICar) => {
   const url = 'http://localhost:5000/api/cars';
   const req = await fetch(url, {
@@ -44,17 +23,6 @@ export const saveEditCar = createEffect(async (editCar:ICar) => {
     },
   });
   return req.json();
-});
-
-saveEditCar.pending.watch((pending) => {
-  pendingData(pending);
-});
-
-saveEditCar.failData.watch(() => {
-  checkPendingError(true);
-  setTimeout(() => {
-    checkPendingError(false);
-  }, 2000);
 });
 
 export const changeLiked = createEffect(async (id:string) => {

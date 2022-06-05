@@ -40,3 +40,5 @@ export const $viewedCars = combine($cars, $searchParams, (cars, searchParams) =>
   }
   return filteredCars.filter((item) => item);
 });
+
+

@@ -65,6 +65,15 @@ class CarController {
       res.status(500).json(e)
     }
   }
+  async getIdArray (req,res) {
+    try{
+      const Cars = await Car.find()
+      const data = Cars.map(item => item.id)
+      return res.status(200).json(data)
+    } catch (e) {
+      res.status(500).json(e)
+    }
+  }
 }
 
 export default new CarController();
