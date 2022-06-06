@@ -15,8 +15,9 @@ import { addCar, saveEditCar } from '../../../models/cars/cars';
 import { ICar } from '../../../types/ICar';
 import { changeViewedModal } from '../../../models/modal/modal';
 import { $selectedCar } from '../../../models/editCar/editCar';
-import { $models, getModelsForAutocomplete, addNewModelInAutocomplete } from '../../../models/Autocomplete/models';
-import { $brands, getBrandsForAutocomplete, addNewBrandInAutocomplete } from '../../../models/Autocomplete/brands';
+import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/Autocomplete/models';
+import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/Autocomplete/brands';
+import useDebounce from '../../../hooks/useDebounce';
 
 interface CustomProps {
   onChange: (event: { target: { value: string } }) => void;
@@ -46,8 +47,8 @@ const NumberFormatCustom = forwardRef<ForwardRefExoticComponent<CustomProps & Re
 
 const CreateAdvertisement = () => {
   const selectedCar = useStore($selectedCar);
-  const models = useStore($models);
-  const brands = useStore($brands);
+  const debouncedModels = useDebounce(getModelsForAutocomplete, 500);
+  const debouncedBrands = useDebounce(getBrandsForAutocomplete, 500);
 
   const [releaseYear, setReleaseYear] = useState<number | string>('');
   const [price, setPrice] = useState<string>('');
@@ -55,6 +56,9 @@ const CreateAdvertisement = () => {
   const [model, setModel] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [confirmModal, setConfirmModal] = useState<boolean>(false);
+
+  const brands = useStore($brands);
+  const models = useStore($models);
 
   useEffect(() => {
     if (selectedCar) {
@@ -67,12 +71,12 @@ const CreateAdvertisement = () => {
   }, []);
 
   useEffect(() => {
-    getModelsForAutocomplete(model);
-  }, [model]);
+    debouncedBrands(brand);
+  }, [brand]);
 
   useEffect(() => {
-    getBrandsForAutocomplete(brand);
-  }, [brand]);
+    debouncedModels(model);
+  }, [model]);
 
   const changeDescription = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
@@ -193,8 +197,8 @@ const CreateAdvertisement = () => {
             <Autocomplete
               id="free-solo-demo"
               freeSolo
-              options={brands?.map((option) => option.brand)}
-              renderInput={(params) => <TextField {...params} value={brand} onChange={changeBrand} label="Модель" />}
+              options={brands.map((option) => option.brand)}
+              renderInput={(params) => <TextField {...params} value={brand} onChange={changeBrand} label="Марка" />}
             />
           </Grid>
 
@@ -202,7 +206,7 @@ const CreateAdvertisement = () => {
             <Autocomplete
               id="free-solo-demo"
               freeSolo
-              options={models?.map((option) => option.model)}
+              options={models.map((option) => option.model)}
               renderInput={(params) => <TextField {...params} value={model} onChange={changeModel} label="Модель" />}
             />
           </Grid>
