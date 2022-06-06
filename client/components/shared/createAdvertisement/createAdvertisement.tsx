@@ -226,7 +226,6 @@ const CreateAdvertisement = () => {
 
       </div>
     </>
-
   );
 };
 export default CreateAdvertisement;

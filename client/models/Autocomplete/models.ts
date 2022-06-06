@@ -1,17 +1,24 @@
 import { createStore, createEffect } from 'effector';
 import { IModels } from '../../types/iModels';
-import useAutocompleteServices from '../../services/getAutocompleteServices';
+import { useHttp } from '../../hooks/useHttp';
+
+const apiBase = 'http://localhost:5000/api/models';
+const { request } = useHttp();
 
 export const getModelsForAutocomplete = createEffect(async (inputText:string) => {
-  const { getModelsAutocomplete } = useAutocompleteServices();
-  const response = await getModelsAutocomplete(inputText);
-  return response;
+  const body = {
+    text: inputText,
+  };
+  const res = await request(apiBase, 'PUT', JSON.stringify(body));
+  return res;
 });
 
 export const addNewModelInAutocomplete = createEffect(async (newModel:string) => {
-  const { addNewModel } = useAutocompleteServices();
-  const response = await addNewModel(newModel);
-  return response;
+  const body = {
+    model: newModel,
+  };
+  const res = await request(apiBase, 'POST', JSON.stringify(body));
+  return res;
 });
 
 export const $models = createStore<IModels[]>([])

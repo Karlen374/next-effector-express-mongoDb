@@ -1,56 +1,30 @@
 import { createEvent, createStore, createEffect } from 'effector';
 import { ICar } from '../../types/ICar';
+import { useHttp } from '../../hooks/useHttp';
+
+const apiBase = 'http://localhost:5000/api/cars';
+const { request } = useHttp();
 
 export const addCar = createEffect(async (car:ICar) => {
-  const url = 'http://localhost:5000/api/cars';
-  const req = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(car),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return req.json();
+  const res = await request(apiBase, 'POST', JSON.stringify(car));
+  return res;
 });
 
 export const saveEditCar = createEffect(async (editCar:ICar) => {
-  const url = 'http://localhost:5000/api/cars';
-  const req = await fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify({ ...editCar, _id: editCar.id }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return req.json();
+  const res = await request(apiBase, 'PUT', JSON.stringify({ ...editCar, _id: editCar.id }));
+  return res;
 });
 
 export const changeLiked = createEffect(async (id:string) => {
   const url = 'http://localhost:5000/api/carLike';
-  const req = await fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify({
-      _id: id,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return req.json();
+  const res = await request(url, 'PUT', JSON.stringify({ _id: id }));
+  return res;
 });
 
 export const changeViewedCar = createEffect(async (id:string) => {
   const url = 'http://localhost:5000/api/carViewed';
-  const req = await fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify({
-      _id: id,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return req.json();
+  const res = await request(url, 'PUT', JSON.stringify({ _id: id }));
+  return res;
 });
 
 export const loadCars = createEvent<ICar[]>();
