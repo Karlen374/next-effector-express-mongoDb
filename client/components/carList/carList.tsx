@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Grid';
 import { useStore } from 'effector-react';
-import { useTransition, config, animated } from 'react-spring';
+import { useTransition, animated } from 'react-spring';
 import Modal from '../shared/modal/modal';
 import CreateAdvertisement from '../shared/createAdvertisement/createAdvertisement';
 import CarItem from './carItem/carItem';
@@ -19,7 +19,7 @@ const CarList = ({ data }:CarListProps) => {
     enter: { opacity: 1 },
     leave: { opacity: 0 },
     delay: 0,
-    config: config.molasses,
+    key: (item) => item.id,
   });
   return (
     <div>
