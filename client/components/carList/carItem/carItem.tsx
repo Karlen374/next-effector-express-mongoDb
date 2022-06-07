@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Grid from '@mui/material/Grid';
-import { CSSTransition } from 'react-transition-group';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconButton from '@mui/material/IconButton';
@@ -60,61 +59,55 @@ const CarItem = ({ id }:CarItemsProps) => {
   });
 
   return (
-    <CSSTransition
-      timeout={1000}
-      classNames="item"
-    >
-      <Grid item md={4} sm={6} lg={4} xs={12}>
-        <div className={itemStyle}>
-          <div>
-            Марка -
-            {item.brand}
-          </div>
-          <div>
-            Модель -
-            {item.model}
-          </div>
-          <div>
-            Стоимость -
-            {item.price}
-            {' '}
-            $
-          </div>
-          <div>
-            Год Выпуска -
-            {item.releaseYear}
-            г.
-          </div>
-          <IconButton
-            className={styles.Items_Block__Like__Btn}
-            onClick={() => changeLiked(item.id)}
-            aria-label="add to favorites"
-          >
-            {likeButton}
-          </IconButton>
-          <Link href={`/${item.id}`}>
-            <Button
-              variant="outlined"
-              size="small"
-              color="success"
-              onClick={() => changeViewedCar(item.id)}
-            >
-              Подробнее
-            </Button>
-          </Link>
-          <Button
-            variant="outlined"
-            color="success"
-            size="small"
-            className={styles.Items_Block__Edit__Btn}
-            onClick={() => editCarInfo()}
-            endIcon={<EditIcon sx={{ color: green[700] }} />}
-          >
-            редактировать
-          </Button>
-        </div>
-      </Grid>
-    </CSSTransition>
+    <div className={itemStyle}>
+      <div>
+        Марка -
+        {item.brand}
+      </div>
+      <div>
+        Модель -
+        {item.model}
+      </div>
+      <div>
+        Стоимость -
+        {item.price}
+        {' '}
+        $
+      </div>
+      <div>
+        Год Выпуска -
+        {item.releaseYear}
+        г.
+      </div>
+      <IconButton
+        className={styles.Items_Block__Like__Btn}
+        onClick={() => changeLiked(item.id)}
+        aria-label="add to favorites"
+      >
+        {likeButton}
+      </IconButton>
+      <Link href={`/${item.id}`}>
+        <Button
+          variant="outlined"
+          size="small"
+          color="success"
+          onClick={() => changeViewedCar(item.id)}
+        >
+          Подробнее
+        </Button>
+      </Link>
+      <Button
+        variant="outlined"
+        color="success"
+        size="small"
+        className={styles.Items_Block__Edit__Btn}
+        onClick={() => editCarInfo()}
+        endIcon={<EditIcon sx={{ color: green[700] }} />}
+      >
+        редактировать
+      </Button>
+    </div>
+
   );
 };
 
