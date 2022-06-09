@@ -13,7 +13,7 @@ import Modal from '../modal/modal';
 import styles from './createAdvertisement.module.scss';
 import { addCar, saveEditCar } from '../../../models/cars/cars';
 import { ICar } from '../../../types/ICar';
-import { changeViewedModal } from '../../../models/modal/modal';
+import { changeAddFormViewedModal } from '../../../models/modal/modal';
 import { $selectedCar } from '../../../models/editCar/editCar';
 import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/Autocomplete/models';
 import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/Autocomplete/brands';
@@ -98,7 +98,7 @@ const CreateAdvertisement = () => {
   const closeAddForm = () => {
     if (releaseYear || price || brand || model || description) {
       setConfirmModal(true);
-    } else changeViewedModal();
+    } else changeAddFormViewedModal(false);
   };
 
   const saveDataCar = () => {
@@ -124,7 +124,7 @@ const CreateAdvertisement = () => {
     addNewBrandInAutocomplete(brand);
     if (!selectedCar) addCar(car);
     else saveEditCar(car);
-    changeViewedModal();
+    changeAddFormViewedModal(false);
   };
 
   const closeModals = () => {
@@ -134,7 +134,7 @@ const CreateAdvertisement = () => {
     setModel('');
     setReleaseYear('');
     setConfirmModal(false);
-    changeViewedModal();
+    changeAddFormViewedModal(false);
   };
 
   const saveButton = (releaseYear && price && Number(price) < 10000 && model && brand && description)

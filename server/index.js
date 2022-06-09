@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import router from './routes/router.js';
+import authRouter from './routes/authRouter.js';
 import cors from 'cors'
 
 const PORT = 5000
@@ -12,6 +13,7 @@ app.use (
 )
 app.use(express.json())
 app.use('/api', router)
+app.use('/auth', authRouter)
 
 
 

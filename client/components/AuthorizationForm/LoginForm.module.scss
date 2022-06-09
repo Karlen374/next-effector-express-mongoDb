@@ -1,0 +1,17 @@
+.Login__Form{
+  &_Close{
+    margin-left: 90%;
+    cursor: pointer;
+    :hover{
+      color: rgb(180, 33, 33);
+    }
+  } 
+  &_Buttons{
+    text-align: center;
+    margin: 30px auto 10px;
+  }
+  &_Header{
+    margin-top: 0;
+  }
+}
+

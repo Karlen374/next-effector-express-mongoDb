@@ -21,6 +21,15 @@ export const changeLiked = createEffect(async (id:string) => {
   return res;
 });
 
+export const pendingData = createEvent<boolean>();
+
+export const $LikeLoader = createStore<boolean>(false)
+  .on(pendingData, (_, pending) => pending);
+
+changeLiked.pending.watch((pending) => {
+  pendingData(pending);
+});
+
 export const changeViewedCar = createEffect(async (id:string) => {
   const url = 'http://localhost:5000/api/carViewed';
   const res = await request(url, 'PUT', JSON.stringify({ _id: id }));

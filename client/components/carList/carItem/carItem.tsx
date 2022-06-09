@@ -12,7 +12,7 @@ import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import styles from './carItem.module.scss';
 import { selectEditCar } from '../../../models/editCar/editCar';
-import { changeViewedModal } from '../../../models/modal/modal';
+import { changeAddFormViewedModal } from '../../../models/modal/modal';
 import {
   changeLiked,
   changeViewedCar,
@@ -28,7 +28,7 @@ const CarItem = ({ id }:CarItemsProps) => {
   const [item, setItem] = useState<ICar>(null);
   const editCarInfo = () => {
     selectEditCar(cars.filter((car) => car.id === id)[0]);
-    changeViewedModal();
+    changeAddFormViewedModal(true);
   };
 
   const loadData = async () => {
