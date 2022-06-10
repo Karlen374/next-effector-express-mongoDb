@@ -4,8 +4,8 @@ import Car from "../models/Car.js";
 class CarController {
   async create (req, res) {
     try {
-      const { id, brand, model, price, releaseYear, description, viewed, liked } = req.body
-      const car = await Car.create({ id,_id:id, brand, model, price, releaseYear, description, viewed, liked })
+      const { id, brand, model, price, releaseYear, description, viewed, liked, userId, userName } = req.body
+      const car = await Car.create({ id,_id:id, brand, model, price, releaseYear, description, viewed, liked, userId, userName })
       res.status(200).json(car)
     } catch (e) {
       res.status(500).json(e)

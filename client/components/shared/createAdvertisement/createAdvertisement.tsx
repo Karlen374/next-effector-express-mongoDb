@@ -18,6 +18,7 @@ import { $selectedCar } from '../../../models/editCar/editCar';
 import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/Autocomplete/models';
 import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/Autocomplete/brands';
 import useDebounce from '../../../hooks/useDebounce';
+import { $userData } from '../../../models/Authorization/authorization';
 
 interface CustomProps {
   onChange: (event: { target: { value: string } }) => void;
@@ -47,6 +48,7 @@ const NumberFormatCustom = forwardRef<ForwardRefExoticComponent<CustomProps & Re
 
 const CreateAdvertisement = () => {
   const selectedCar = useStore($selectedCar);
+  const userData = useStore($userData);
   const debouncedModels = useDebounce(getModelsForAutocomplete, 500);
   const debouncedBrands = useDebounce(getBrandsForAutocomplete, 500);
 
@@ -119,6 +121,8 @@ const CreateAdvertisement = () => {
       description,
       viewed: false,
       liked: false,
+      userId: userData.userId,
+      userName: userData.userName,
     };
     addNewModelInAutocomplete(model);
     addNewBrandInAutocomplete(brand);

@@ -7,4 +7,6 @@ export interface ICar {
   description: string;
   viewed: boolean;
   liked: boolean;
+  userId:string;
+  userName:string;
 }

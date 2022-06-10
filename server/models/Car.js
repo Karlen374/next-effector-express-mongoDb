@@ -11,6 +11,8 @@ const Car = new mongoose.Schema({
   description:{type: String,required: true},
   viewed:{type: Boolean,required: true},
   liked:{type: Boolean,required: true},
+  userId:{type: String,required: true},
+  userName:{type: String,required: true}
 })
 
 export default mongoose.model('Car',Car)

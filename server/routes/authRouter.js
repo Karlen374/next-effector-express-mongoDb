@@ -7,7 +7,7 @@ import RoleMiddleware from "../middleware/roleMiddleware.js";
 const authRouter = new Router()
 
 authRouter.post('/registration',[
-  check('username',"Имя Пользователья не может быть пустым").notEmpty(),
+  check('email',"Такой почты не существует").isEmail(),
   check('password',"Пароль должен быть больше 4 символов").isLength({min:4}),
 ], AuthController.registration)
 authRouter.post('/login', AuthController.login)

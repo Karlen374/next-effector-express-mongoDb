@@ -19,12 +19,14 @@ import {
   $cars,
 } from '../../../models/cars/cars';
 import { ICar } from '../../../types/ICar';
+import { $userData } from '../../../models/Authorization/authorization';
 
 interface CarItemsProps {
   id:string;
 }
 const CarItem = ({ id }:CarItemsProps) => {
   const cars = useStore($cars);
+  const userData = useStore($userData);
   const [item, setItem] = useState<ICar>(null);
   const editCarInfo = () => {
     selectEditCar(cars.filter((car) => car.id === id)[0]);
@@ -61,6 +63,10 @@ const CarItem = ({ id }:CarItemsProps) => {
   return (
     <div className={itemStyle}>
       <div>
+        Автор -
+        {item.userName}
+      </div>
+      <div>
         Марка -
         {item.brand}
       </div>
@@ -96,6 +102,8 @@ const CarItem = ({ id }:CarItemsProps) => {
           Подробнее
         </Button>
       </Link>
+      { ((userData && userData?.userId === item.userId) || (userData?.role === 'ADMIN'))
+      && (
       <Button
         variant="outlined"
         color="success"
@@ -106,8 +114,8 @@ const CarItem = ({ id }:CarItemsProps) => {
       >
         редактировать
       </Button>
+      )}
     </div>
-
   );
 };
 
