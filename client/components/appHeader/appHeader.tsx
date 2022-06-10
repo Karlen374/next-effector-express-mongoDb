@@ -80,7 +80,15 @@ const AppHeader = () => {
           </Link>
         </Grid>
         <Grid item lg={6} md={6} sm={6} xs={12}>
-          <Button variant="contained" color="success" onClick={() => openModalAddForm()}>разместить объявление</Button>
+          {userData && (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => openModalAddForm()}
+          >
+            разместить объявление
+          </Button>
+          )}
           {adminPanelButton}
         </Grid>
       </Grid>
