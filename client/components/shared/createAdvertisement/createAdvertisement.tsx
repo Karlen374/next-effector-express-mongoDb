@@ -72,14 +72,6 @@ const CreateAdvertisement = () => {
     }
   }, []);
 
-  useEffect(() => {
-    debouncedBrands(brand);
-  }, [brand]);
-
-  useEffect(() => {
-    debouncedModels(model);
-  }, [model]);
-
   const changeDescription = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
@@ -89,9 +81,11 @@ const CreateAdvertisement = () => {
   };
   const changeModel = (e:React.ChangeEvent<HTMLInputElement>):void => {
     setModel(e.target.value);
+    debouncedModels(model);
   };
   const changeBrand = (e:React.ChangeEvent<HTMLInputElement>):void => {
     setBrand(e.target.value);
+    debouncedBrands(brand);
   };
   const changeReleaseYear = (e:React.ChangeEvent<HTMLInputElement>):void => {
     setReleaseYear(e.target.value);

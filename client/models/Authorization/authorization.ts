@@ -1,11 +1,9 @@
 import { createStore, createEffect, createEvent } from 'effector';
 import { getLocalStorage } from '../../hooks/hooks';
-import { useHttp } from '../../hooks/useHttp';
 import { ILoginForm } from '../../types/ILoginForm';
 import { IRegistrationForm } from '../../types/IRegistrationForm';
 import { IUser } from '../../types/IUser';
-
-const { request } = useHttp();
+import { request } from '../../hooks/useHttp';
 
 export const userRegistration = createEffect(async (data:IRegistrationForm) => {
   const res = await request('http://localhost:5000/auth/registration', 'POST', JSON.stringify(data));

@@ -1,9 +1,8 @@
 import { createStore, createEffect } from 'effector';
 import { IModels } from '../../types/iModels';
-import { useHttp } from '../../hooks/useHttp';
+import { request } from '../../hooks/useHttp';
 
 const apiBase = 'http://localhost:5000/api/models';
-const { request } = useHttp();
 
 export const getModelsForAutocomplete = createEffect(async (inputText:string) => {
   const body = {

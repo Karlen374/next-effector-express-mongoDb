@@ -1,9 +1,8 @@
 import { createEvent, createStore, createEffect } from 'effector';
 import { ICar } from '../../types/ICar';
-import { useHttp } from '../../hooks/useHttp';
+import { request } from '../../hooks/useHttp';
 
 const apiBase = 'http://localhost:5000/api/cars';
-const { request } = useHttp();
 
 export const addCar = createEffect(async (car:ICar) => {
   const res = await request(apiBase, 'POST', JSON.stringify(car));

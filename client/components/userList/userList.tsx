@@ -1,13 +1,15 @@
 import { Grid } from '@mui/material';
-import { AdminPanelPage } from '../../pages/adminPanel';
+import { useStore } from 'effector-react';
+import { $allUsers } from '../../models/users/user';
 import UserItems from './userItem/userItems';
 import styles from './userList.module.scss';
 
-const UserList = ({ data }:AdminPanelPage) => {
+const UserList = () => {
+  const allUsers = useStore($allUsers);
   return (
     <div className={styles.User_List}>
       <Grid container spacing={3}>
-        <UserItems data={data} />
+        <UserItems data={allUsers} />
       </Grid>
     </div>
   );
