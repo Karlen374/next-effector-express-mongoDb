@@ -35,7 +35,6 @@
         "arrow-body-style": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
         "linebreak-style": "off",
-        // "@typescript-eslint/no-unnecessary-type-assertion": 2,
         "no-plusplus": 0,
         "global-require": 0,
         "react/jsx-props-no-spreading": "off",
@@ -48,6 +47,7 @@
          "import/prefer-default-export": "off",
          "no-param-reassign": 0,
          "no-useless-catch": 0,
-         "no-underscore-dangle":0
+         "no-underscore-dangle":0,
+        //  "jsx-a11y/label-has-associated-control":0
     }
 }

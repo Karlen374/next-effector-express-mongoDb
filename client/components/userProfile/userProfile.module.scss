@@ -1,0 +1,17 @@
+.Profile_Block{
+  &_Load__Avatar{
+    margin-top:10px;
+  }
+  &__Avatar{
+    margin-top: 10px;
+  }
+  & input{
+    display: none;
+  }
+  & label{
+    cursor:pointer;
+  }
+  h2{
+    margin-top: 15px;
+  }
+}

@@ -34,13 +34,27 @@ export const userLogin = createEffect(async (data:ILoginForm) => {
   return res;
 });
 
+export const  uploadUserAvatar = createEffect(async (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  const headers = {
+    Authorization: `Bearer ${JSON.parse(getLocalStorage()?.getItem('data')).token}`,
+  };
+  const res = await request("http://localhost:5000/static/avatar","POST", formData, headers)
+  return res;
+});
+
 export const loadUserData = createEvent<void>();
 export const clearUserData = createEvent<void>();
 
 export const $userData = createStore<IUser>(null)
-  .on(userLogin.doneData, (_, data) => {
-    getLocalStorage()?.setItem('data', JSON.stringify(data));
-    return data;
+  .on(userLogin.doneData, (_, user) => {
+    getLocalStorage()?.setItem('data', JSON.stringify(user));
+    return user;
+  })
+  .on(uploadUserAvatar.doneData, (_, user)=>{
+    getLocalStorage()?.setItem('data', JSON.stringify(user));
+    return user;
   })
   .on(loadUserData, () => JSON.parse(getLocalStorage()?.getItem('data')))
 

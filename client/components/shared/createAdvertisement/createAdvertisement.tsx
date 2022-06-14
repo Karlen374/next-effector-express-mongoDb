@@ -15,10 +15,10 @@ import { addCar, saveEditCar } from '../../../models/cars/cars';
 import { ICar } from '../../../types/ICar';
 import { changeAddFormViewedModal } from '../../../models/modal/modal';
 import { $selectedCar } from '../../../models/editCar/editCar';
-import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/Autocomplete/models';
-import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/Autocomplete/brands';
+import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/autocomplete/models';
+import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/autocomplete/brands';
 import useDebounce from '../../../hooks/useDebounce';
-import { $userData } from '../../../models/Authorization/authorization';
+import { $userData } from '../../../models/authorization/authorization';
 
 interface CustomProps {
   onChange: (event: { target: { value: string } }) => void;
@@ -115,7 +115,7 @@ const CreateAdvertisement = () => {
       description,
       viewed: false,
       liked: false,
-      userId: userData.userId,
+      userId: userData._id,
       userName: userData.userName,
     };
     addNewModelInAutocomplete(model);

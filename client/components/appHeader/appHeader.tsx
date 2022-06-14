@@ -7,6 +7,7 @@ import Chip from '@mui/material/Chip';
 import { grey } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
 import styles from './appHeader.module.scss';
 import { changeAddFormViewedModal, changeLoginFormViewedModal } from '../../models/modal/modal';
 import { setSelectEditCar } from '../../models/editCar/editCar';
@@ -18,13 +19,12 @@ import {
   $userData,
   clearUserData,
   loadUserData,
-} from '../../models/Authorization/authorization';
+} from '../../models/authorization/authorization';
 
 const AppHeader = () => {
   const alert = useStore($Alert);
   const registrationMessage = useStore($registrationMessage);
   const userData = useStore($userData);
-
   const openModalAddForm = () => {
     setSelectEditCar();
     changeAddFormViewedModal(true);
@@ -48,13 +48,15 @@ const AppHeader = () => {
   const contentAuth = userData
     ? (
       <>
-        <Chip icon={<FaceIcon />} sx={{ color: grey[50] }} variant="outlined" label={userData.userName} />
+        <Link href={`/profile/${userData._id}`}>
+          <Chip icon={<FaceIcon />} sx={{ color: grey[50] }} variant="outlined" label={userData.userName} />
+        </Link>
         <Button
           variant="text"
           className={styles.Home_Page_Button}
           onClick={() => clearUserData()}
         >
-          Выйти
+          <LogoutIcon />
         </Button>
       </>
     )

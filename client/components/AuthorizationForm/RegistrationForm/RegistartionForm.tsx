@@ -10,7 +10,7 @@ import {
 } from '../../../models/modal/modal';
 import Modal from '../../shared/modal/modal';
 import styles from './RegistrationForm.module.scss';
-import { userRegistration } from '../../../models/Authorization/authorization';
+import { userRegistration } from '../../../models/authorization/authorization';
 
 const RegistrationForm = () => {
   const registrationModal = useStore($registrationModal);

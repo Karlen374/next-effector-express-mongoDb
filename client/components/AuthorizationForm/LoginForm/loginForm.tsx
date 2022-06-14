@@ -10,7 +10,7 @@ import {
 } from '../../../models/modal/modal';
 import Modal from '../../shared/modal/modal';
 import styles from './LoginForm.module.scss';
-import { userLogin } from '../../../models/Authorization/authorization';
+import { userLogin } from '../../../models/authorization/authorization';
 
 const LoginForm = () => {
   const loginModal = useStore($loginModal);

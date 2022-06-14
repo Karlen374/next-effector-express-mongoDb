@@ -33,7 +33,7 @@ class AuthController {
     } catch (e) {
       console.log(e);
       res.status(400).json({message: "Registration Error"});
-    }
+    } 
   }
 
   async login(req, res) {
@@ -48,13 +48,24 @@ class AuthController {
         return res.status(400).json({message: 'Введен неверный пароль'})
       }
       const token = generateAccessToken(user._id, user.roles)
-      return res.json({userId:user._id,userName:user.userName,email:user.email,role:user.roles[0],token})
+      return res.json({_id:user._id,userName:user.userName,email:user.email,role:user.roles[0],token})
     } catch (e) {
       console.log(e);
       res.status(400).json({message: "Login Error"});
     }
   }
-
+  async getOneUser (req,res) {
+    try {
+      const { id } = req.params
+      if (!id) {
+        res.status(400).json({message: 'Id не указан'})
+      }
+      const user = await User.findById(id);
+      return res.json(user)
+    } catch (e){
+      res.status(500).json(e)
+    }
+  }
   async getUsers(req, res) {
     try {
       const users = await User.find()
