@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import Alert from '@mui/material/Alert';
-import FaceIcon from '@mui/icons-material/Face';
+import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { grey } from '@mui/material/colors';
 import { useStore } from 'effector-react';
@@ -49,7 +49,14 @@ const AppHeader = () => {
     ? (
       <>
         <Link href={`/profile/${userData._id}`}>
-          <Chip icon={<FaceIcon />} sx={{ color: grey[50] }} variant="outlined" label={userData.userName} />
+          <Chip
+            avatar={userData.avatar
+              ? <Avatar alt={userData.userName} src={`http://localhost:5000/${userData.avatar}`} />
+              : <Avatar>{userData.userName[0]}</Avatar>}
+            sx={{ color: grey[50] }}
+            variant="outlined"
+            label={userData.userName}
+          />
         </Link>
         <Button
           variant="text"

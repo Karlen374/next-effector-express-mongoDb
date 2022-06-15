@@ -6,41 +6,42 @@ import { $currentUserCars, loadCurrentUserCars } from '../../models/currentUserC
 import { IUser } from '../../types/IUser';
 import CarList from '../carList/carList';
 import styles from './userProfile.module.scss';
-import { uploadUserAvatar } from '../../models/authorization/authorization';
+import { $userData, uploadUserAvatar } from '../../models/authorization/authorization';
 
 interface UserProfileProps {
   user: IUser;
 }
 const userProfile = ({ user }:UserProfileProps) => {
   const currentUserCars = useStore($currentUserCars);
-
+  const userData = useStore($userData);
   useEffect(() => {
     loadCurrentUserCars(user._id);
   }, []);
 
   const changeHandler = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     uploadUserAvatar(file);
-  }
-  const viewAvatar = !user.avatar ? 
-  <Grid className ={styles.Profile_Block_Load__Avatar} item md={12} sm={12} lg={12} xs={12}>
+  };
+  const userAvatar = user?.avatar
+    ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" /> : null;
+
+  const uploadAvatar = (user?._id === userData?._id && !user?.avatar) ? (
     <label htmlFor="icon-button-file">
       Загрузить Фотографию
-      <Input onChange={e => changeHandler(e)} id="icon-button-file" type="file" />
+      <Input onChange={(e) => changeHandler(e)} id="icon-button-file" type="file" />
       <IconButton color="primary" aria-label="upload picture" component="span">
         <CameraAltIcon />
       </IconButton>
     </label>
-  </Grid>
-  :
-  <Grid className ={styles.Profile_Block__Avatar} item md={12} sm={12} lg={12} xs={12}>
-    <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`}  height='150' />
-  </Grid>
+  ) : null;
 
   return (
     <div className={styles.Profile_Block}>
       <Grid container spacing={5}>
-          {viewAvatar}
+        <Grid className={styles.Profile_Block__Avatar} item md={12} sm={12} lg={12} xs={12}>
+          {userAvatar}
+          {uploadAvatar}
+        </Grid>
         <Grid item md={12} sm={12} lg={12} xs={12}>
           <h2>
             Автор -
@@ -52,13 +53,13 @@ const userProfile = ({ user }:UserProfileProps) => {
             {' '}
             {user.email}
           </div>
-          
+
         </Grid>
       </Grid>
       <h2>
-            Все Объявления
-            {' '}
-            {user.userName}
+        Все Объявления
+        {' '}
+        {user.userName}
       </h2>
       <CarList data={currentUserCars} />
     </div>

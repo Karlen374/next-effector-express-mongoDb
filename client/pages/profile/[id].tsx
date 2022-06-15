@@ -11,9 +11,11 @@ export async function getServerSideProps({ params }) {
     },
   };
 }
+
 interface IUSerProfilePage {
   user:IUser;
 }
+
 const UserProfilePage = ({ user }:IUSerProfilePage) => {
   return (
     <MainLayout>

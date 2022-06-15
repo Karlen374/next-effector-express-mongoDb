@@ -1,6 +1,6 @@
 import { Grid, TextField } from '@mui/material';
 import { useStore } from 'effector-react';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {
@@ -14,58 +14,78 @@ import { userLogin } from '../../../models/authorization/authorization';
 
 const LoginForm = () => {
   const loginModal = useStore($loginModal);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm({ mode: 'onBlur' });
   const openRegistrationForm = () => {
     changeLoginFormViewedModal(false);
+    reset();
     changeRegistrationFormViewedModal(true);
   };
 
-  const LoginUser = () => {
+  const LoginUser = ({ email, password }) => {
     userLogin({ email, password });
-    setEmail('');
-    setPassword('');
+    reset();
     changeLoginFormViewedModal(false);
   };
   const closeLoginForm = () => {
-    setEmail('');
-    setPassword('');
+    reset();
     changeLoginFormViewedModal(false);
   };
   return (
     <Modal active={loginModal}>
-      <CloseOutlinedIcon onClick={() => closeLoginForm()} className={styles.Login__Form_Close} />
-      <h2 className={styles.Login__Form_Header}>Вход</h2>
-      <Grid container spacing={2}>
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <TextField
-            id="outlined-name"
-            label="адрес эл. почты"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+      <CloseOutlinedIcon onClick={() => closeLoginForm()} className={styles.Login_Form__Close} />
+      <h2 className={styles.Login_Form__Header}>Вход</h2>
+      <form onSubmit={handleSubmit(LoginUser)}>
+        <Grid container spacing={2}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <TextField
+              id="outlined-name"
+              label="адрес эл. почты"
+              type="email"
+              {...register('email', {
+                required: 'Это поле обязательное',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'Пожалуйста Введите корректный E-mail! ',
+                },
+              })}
+            />
+            {errors.email?.message && (
+            <div className={styles.Login_Form__ErrorMessage}>{errors.email?.message}</div>
+            )}
+          </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <TextField
+              id="outlined-password-input"
+              label="Пароль"
+              type="password"
+              autoComplete="current-password"
+              {...register('password', {
+                required: 'Это поле обязательное',
+                minLength: {
+                  value: 5,
+                  message: 'Пароль слишком короткий',
+                },
+              })}
+            />
+            {errors.password?.message && (
+            <div className={styles.Login_Form__ErrorMessage}>{errors.password?.message}</div>
+            )}
+          </Grid>
+          <div className={styles.Login_Form__Buttons}>
+            <Button type="submit" variant="contained" color="success">
+              Войти
+            </Button>
+            <Button variant="text" color="success" onClick={() => openRegistrationForm()}>
+              Регистрация
+            </Button>
+          </div>
         </Grid>
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <TextField
-            id="outlined-password-input"
-            label="Пароль"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Grid>
-        <div className={styles.Login__Form_Buttons}>
-          <Button onClick={() => LoginUser()} variant="contained" color="success">
-            Войти
-          </Button>
-          <Button variant="text" color="success" onClick={() => openRegistrationForm()}>
-            Регистрация
-          </Button>
-        </div>
-      </Grid>
+      </form>
     </Modal>
   );
 };

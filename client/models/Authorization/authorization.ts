@@ -34,13 +34,32 @@ export const userLogin = createEffect(async (data:ILoginForm) => {
   return res;
 });
 
-export const  uploadUserAvatar = createEffect(async (file) => {
-  const formData = new FormData()
-  formData.append('file', file)
+export const checkLoginMessage = createEvent<string>('');
+
+userLogin.doneData.watch(() => {
+  checkLoginMessage('success');
+  setTimeout(() => {
+    checkLoginMessage('');
+  }, 2000);
+});
+
+userLogin.failData.watch(() => {
+  checkLoginMessage('error');
+  setTimeout(() => {
+    checkLoginMessage('');
+  }, 2000);
+});
+
+export const $loginMessage = createStore<string>('')
+  .on(checkLoginMessage, (_, message) => message);
+
+export const uploadUserAvatar = createEffect(async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
   const headers = {
     Authorization: `Bearer ${JSON.parse(getLocalStorage()?.getItem('data')).token}`,
   };
-  const res = await request("http://localhost:5000/static/avatar","POST", formData, headers)
+  const res = await request('http://localhost:5000/static/avatar', 'POST', formData, headers);
   return res;
 });
 
@@ -52,7 +71,7 @@ export const $userData = createStore<IUser>(null)
     getLocalStorage()?.setItem('data', JSON.stringify(user));
     return user;
   })
-  .on(uploadUserAvatar.doneData, (_, user)=>{
+  .on(uploadUserAvatar.doneData, (_, user) => {
     getLocalStorage()?.setItem('data', JSON.stringify(user));
     return user;
   })
