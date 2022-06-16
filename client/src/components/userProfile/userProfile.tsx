@@ -2,11 +2,11 @@ import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { Grid, IconButton, Input } from '@mui/material';
-import { $currentUserCars, loadCurrentUserCars } from '../../models/currentUserCars/currentUserCars';
-import { IUser } from '../../types/IUser';
-import CarList from '../carList/carList';
+import { $currentUserCars, loadCurrentUserCars } from 'src/models/currentUserCars/currentUserCars';
+import { IUser } from 'src/types/IUser';
+import { $userData, uploadUserAvatar } from 'src/models/authorization/authorization';
+import CarList from 'src/components/carList/carList';
 import styles from './userProfile.module.scss';
-import { $userData, uploadUserAvatar } from '../../models/authorization/authorization';
 
 interface UserProfileProps {
   user: IUser;

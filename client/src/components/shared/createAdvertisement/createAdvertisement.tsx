@@ -9,16 +9,16 @@ import NumberFormat from 'react-number-format';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useStore } from 'effector-react';
-import Modal from '../modal/modal';
+import { addCar, saveEditCar } from 'src/models/cars/cars';
+import { ICar } from 'src/types/ICar';
+import { changeAddFormViewedModal } from 'src/models/modal/modal';
+import { $selectedCar } from 'src/models/editCar/editCar';
+import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from 'src/models/autocomplete/models';
+import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from 'src/models/autocomplete/brands';
+import useDebounce from 'src/hooks/useDebounce';
+import { $userData } from 'src/models/authorization/authorization';
+import Modal from 'src/components/shared/modal/modal';
 import styles from './createAdvertisement.module.scss';
-import { addCar, saveEditCar } from '../../../models/cars/cars';
-import { ICar } from '../../../types/ICar';
-import { changeAddFormViewedModal } from '../../../models/modal/modal';
-import { $selectedCar } from '../../../models/editCar/editCar';
-import { $models, addNewModelInAutocomplete, getModelsForAutocomplete } from '../../../models/autocomplete/models';
-import { $brands, addNewBrandInAutocomplete, getBrandsForAutocomplete } from '../../../models/autocomplete/brands';
-import useDebounce from '../../../hooks/useDebounce';
-import { $userData } from '../../../models/authorization/authorization';
 
 interface CustomProps {
   onChange: (event: { target: { value: string } }) => void;

@@ -1,12 +1,12 @@
 import Grid from '@mui/material/Grid';
 import { useStore } from 'effector-react';
 import { useTransition, animated } from 'react-spring';
-import Modal from '../shared/modal/modal';
-import CreateAdvertisement from '../shared/createAdvertisement/createAdvertisement';
+import { $modal } from 'src/models/modal/modal';
+import { ICar } from 'src/types/ICar';
+import Modal from 'src/components/shared/modal/modal';
+import CreateAdvertisement from 'src/components/shared/createAdvertisement/createAdvertisement';
 import CarItem from './carItem/carItem';
 import styles from './carList.module.scss';
-import { $modal } from '../../models/modal/modal';
-import { ICar } from '../../types/ICar';
 
 interface CarListProps {
   data:ICar[];

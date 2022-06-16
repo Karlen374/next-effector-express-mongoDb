@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import clsx from 'clsx';
-import { AdminPanelPage, AdminPanelProps } from '../../../pages/adminPanel';
+import { AdminPanelPage, AdminPanelProps } from 'pages/adminPanel';
 import styles from './userItem.module.scss';
 
 const UserItems = ({ data }: AdminPanelPage) => {

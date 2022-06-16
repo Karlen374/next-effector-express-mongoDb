@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { useStore } from 'effector-react';
-import { $allUsers } from '../../models/users/users';
-import UserItems from './userItem/userItems';
+import { $allUsers } from 'src/models/users/users';
+import UserItems from 'src/components/userList/userItem/userItems';
 import styles from './userList.module.scss';
 
 const UserList = () => {

@@ -3,9 +3,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
+import { ICar } from 'src/types/ICar';
+import { changeLiked } from 'src/models/cars/cars';
 import styles from './carInfo.module.scss';
-import { ICar } from '../../types/ICar';
-import { changeLiked } from '../../models/cars/cars';
 
 interface CarInfoProps {
   car: ICar,

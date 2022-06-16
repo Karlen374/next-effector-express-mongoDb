@@ -10,16 +10,16 @@ import { red, green } from '@mui/material/colors';
 import clsx from 'clsx';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
-import styles from './carItem.module.scss';
-import { selectEditCar } from '../../../models/editCar/editCar';
-import { changeAddFormViewedModal } from '../../../models/modal/modal';
+import { selectEditCar } from 'src/models/editCar/editCar';
+import { changeAddFormViewedModal } from 'src/models/modal/modal';
 import {
   changeLiked,
   changeViewedCar,
   $cars,
-} from '../../../models/cars/cars';
-import { ICar } from '../../../types/ICar';
-import { $userData } from '../../../models/authorization/authorization';
+} from 'src/models/cars/cars';
+import { ICar } from 'src/types/ICar';
+import { $userData } from 'src/models/authorization/authorization';
+import styles from './carItem.module.scss';
 
 interface CarItemsProps {
   id:string;

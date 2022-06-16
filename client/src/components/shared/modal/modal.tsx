@@ -1,12 +1,12 @@
 import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
-import { ModalProps } from './modal.interface';
-import styles from './modal.module.scss';
 import {
   changeAddFormViewedModal,
   changeLoginFormViewedModal,
   changeRegistrationFormViewedModal,
-} from '../../../models/modal/modal';
+} from 'src/models/modal/modal';
+import { ModalProps } from './modal.interface';
+import styles from './modal.module.scss';
 
 const Modal = ({ active, children }:ModalProps) => {
   const close = () => {

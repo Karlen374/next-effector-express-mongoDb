@@ -1,7 +1,7 @@
 import { createStore, createEffect } from 'effector';
 import { getLocalStorage } from '../../hooks/hooks';
 import { request } from '../../hooks/useHttp';
-import { AdminPanelProps } from '../../pages/adminPanel';
+import { AdminPanelProps } from '../../../pages/adminPanel';
 
 export const getUsers = createEffect(async () => {
   const headers = {

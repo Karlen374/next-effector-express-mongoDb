@@ -11,14 +11,14 @@ import Grid from '@mui/material/Grid';
 import { red } from '@mui/material/colors';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useStore } from 'effector-react';
-import styles from './carListHeader.module.scss';
 import {
   $searchParams,
   changeShowByLikedBtn,
   changeSearchInput,
   changeFilterValue,
   changeVisibleArrayInterval,
-} from '../../models/searchParams/searchParams';
+} from 'src/models/searchParams/searchParams';
+import styles from './carListHeader.module.scss';
 
 const CarListHeader = () => {
   const [value, setValue] = useState<number[]>([0, 10000]);
