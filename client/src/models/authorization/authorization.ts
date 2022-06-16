@@ -1,9 +1,9 @@
 import { createStore, createEffect, createEvent } from 'effector';
-import { getLocalStorage } from '../../hooks/hooks';
-import { ILoginForm } from '../../types/ILoginForm';
-import { IRegistrationForm } from '../../types/IRegistrationForm';
-import { IUser } from '../../types/IUser';
-import { request } from '../../hooks/useHttp';
+import { getLocalStorage } from 'src/hooks/hooks';
+import { ILoginForm } from 'src/types/ILoginForm';
+import { IRegistrationForm } from 'src/types/IRegistrationForm';
+import { IUser } from 'src/types/IUser';
+import { request } from 'src/hooks/useHttp';
 
 export const userRegistration = createEffect(async (data:IRegistrationForm) => {
   const res = await request('http://localhost:5000/auth/registration', 'POST', JSON.stringify(data));
@@ -60,6 +60,14 @@ export const uploadUserAvatar = createEffect(async (file) => {
     Authorization: `Bearer ${JSON.parse(getLocalStorage()?.getItem('data')).token}`,
   };
   const res = await request('http://localhost:5000/static/avatar', 'POST', formData, headers);
+  return res;
+});
+
+export const deleteUserAvatar = createEffect(async () => {
+  const headers = {
+    Authorization: `Bearer ${JSON.parse(getLocalStorage()?.getItem('data')).token}`,
+  };
+  const res = await request('http://localhost:5000/static/avatar', 'DELETE', null, headers);
   return res;
 });
 

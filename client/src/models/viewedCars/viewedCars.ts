@@ -1,6 +1,6 @@
 import { combine } from 'effector';
-import { $searchParams } from '../searchParams/searchParams';
-import { $cars } from '../cars/cars';
+import { $searchParams } from 'src/models/searchParams/searchParams';
+import { $cars } from 'src/models/cars/cars';
 
 export const $viewedCars = combine($cars, $searchParams, (cars, searchParams) => {
   let filteredCars = cars;

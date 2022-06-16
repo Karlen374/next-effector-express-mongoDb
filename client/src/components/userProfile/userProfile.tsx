@@ -1,10 +1,12 @@
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid, IconButton, Input } from '@mui/material';
 import { $currentUserCars, loadCurrentUserCars } from 'src/models/currentUserCars/currentUserCars';
 import { IUser } from 'src/types/IUser';
-import { $userData, uploadUserAvatar } from 'src/models/authorization/authorization';
+import { $userData, deleteUserAvatar, uploadUserAvatar } from 'src/models/authorization/authorization';
 import CarList from 'src/components/carList/carList';
 import styles from './userProfile.module.scss';
 
@@ -22,8 +24,12 @@ const userProfile = ({ user }:UserProfileProps) => {
     const file = e.target.files[0];
     uploadUserAvatar(file);
   };
+  const delUserAvatar = () => {
+    deleteUserAvatar();
+  };
   const userAvatar = user?.avatar
-    ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" /> : null;
+    ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" />
+    : null;
 
   const uploadAvatar = (user?._id === userData?._id && !user?.avatar) ? (
     <label htmlFor="icon-button-file">
@@ -39,10 +45,16 @@ const userProfile = ({ user }:UserProfileProps) => {
     <div className={styles.Profile_Block}>
       <Grid container spacing={5}>
         <Grid className={styles.Profile_Block__Avatar} item md={12} sm={12} lg={12} xs={12}>
+
           {userAvatar}
           {uploadAvatar}
         </Grid>
         <Grid item md={12} sm={12} lg={12} xs={12}>
+          {userAvatar && user?._id === userData?._id && (
+          <Button onClick={() => delUserAvatar()} variant="outlined" color="error" startIcon={<DeleteIcon />}>
+            Delete
+          </Button>
+          )}
           <h2>
             Автор -
             {' '}

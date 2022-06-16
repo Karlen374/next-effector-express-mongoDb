@@ -1,5 +1,5 @@
 import { createEvent, createStore } from 'effector';
-import { addCar, saveEditCar } from '../cars/cars';
+import { addCar, saveEditCar } from 'src/models/cars/cars';
 
 export const checkPendingError = createEvent<boolean>();
 

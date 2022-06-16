@@ -1,5 +1,5 @@
 import { createEvent, createStore } from 'effector';
-import { ISearchParams } from '../../types/ISearchParams';
+import { ISearchParams } from 'src/types/ISearchParams';
 
 export const changeSearchInput = createEvent<string>();
 export const changeShowByLikedBtn = createEvent<void>();

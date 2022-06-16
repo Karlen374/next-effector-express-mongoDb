@@ -1,6 +1,6 @@
 import { createEvent, createStore, createEffect } from 'effector';
-import { ICar } from '../../types/ICar';
-import { request } from '../../hooks/useHttp';
+import { ICar } from 'src/types/ICar';
+import { request } from 'src/hooks/useHttp';
 
 const apiBase = 'http://localhost:5000/api/cars';
 

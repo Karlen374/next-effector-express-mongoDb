@@ -1,6 +1,6 @@
 import { createEffect, createStore } from 'effector';
-import { request } from '../../hooks/useHttp';
-import { ICar } from '../../types/ICar';
+import { request } from 'src/hooks/useHttp';
+import { ICar } from 'src/types/ICar';
 
 export const loadCurrentUserCars = createEffect(async (id:string) => {
   const res = await request('http://localhost:5000/api/cars');

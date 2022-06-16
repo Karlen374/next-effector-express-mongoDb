@@ -1,6 +1,6 @@
 import { createStore, createEffect } from 'effector';
-import { IBrands } from '../../types/IBrands';
-import { request } from '../../hooks/useHttp';
+import { IBrands } from 'src/types/IBrands';
+import { request } from 'src/hooks/useHttp';
 
 const apiBaseBrands = 'http://localhost:5000/api/brands';
 

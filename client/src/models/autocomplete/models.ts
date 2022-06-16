@@ -1,6 +1,6 @@
 import { createStore, createEffect } from 'effector';
-import { IModels } from '../../types/iModels';
-import { request } from '../../hooks/useHttp';
+import { IModels } from 'src/types/iModels';
+import { request } from 'src/hooks/useHttp';
 
 const apiBase = 'http://localhost:5000/api/models';
 
