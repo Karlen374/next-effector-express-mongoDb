@@ -26,6 +26,16 @@ export const changeViewedCar = createEffect(async (id:string) => {
   return res;
 });
 
+export const uploadCarPhoto = createEffect(async ({ file, carId }) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const headers = {
+    carId,
+  };
+  const res = await request('http://localhost:5000/api/addPhoto', 'POST', formData, headers);
+  return res;
+});
+
 export const loadCars = createEvent<ICar[]>();
 
 export const $cars = createStore<ICar[]>([])
@@ -54,7 +64,14 @@ export const $cars = createStore<ICar[]>([])
     });
     return data;
   })
-
+  .on(uploadCarPhoto.doneData, (cars, newCar) => {
+    const data = cars.map((item) => {
+      if (item.id === newCar.id) {
+        return newCar;
+      } else return item;
+    });
+    return data;
+  })
   .on(changeViewedCar.doneData, (cars, viewedCar) => {
     const data = cars.map((item) => {
       if (item.id === viewedCar.id) {

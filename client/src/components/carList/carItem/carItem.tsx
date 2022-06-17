@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DownloadIcon from '@mui/icons-material/Download';
+import PreviewIcon from '@mui/icons-material/Preview';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -18,7 +19,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { red, green } from '@mui/material/colors';
-import clsx from 'clsx';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { selectEditCar } from 'src/models/editCar/editCar';
@@ -27,6 +27,7 @@ import {
   changeLiked,
   changeViewedCar,
   $cars,
+  uploadCarPhoto,
 } from 'src/models/cars/cars';
 import { ICar } from 'src/types/ICar';
 import { $userData } from 'src/models/authorization/authorization';
@@ -42,6 +43,7 @@ const CarItem = ({ id }:CarItemsProps) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [modal, setModal] = useState<boolean>(false);
+  const [item, setItem] = useState<ICar>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -53,7 +55,7 @@ const CarItem = ({ id }:CarItemsProps) => {
     setAnchorEl(null);
     setModal(true);
   };
-  const [item, setItem] = useState<ICar>(null);
+
   const editCarInfo = () => {
     selectEditCar(cars.filter((car) => car.id === id)[0]);
     changeAddFormViewedModal(true);
@@ -63,6 +65,11 @@ const CarItem = ({ id }:CarItemsProps) => {
     const res = await fetch(`http://localhost:5000/api/cars/${id}`);
     const data = await res.json();
     setItem(data);
+  };
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+    uploadCarPhoto({ file, carId: item.id });
+    setModal(false);
   };
   useEffect(() => {
     loadData();
@@ -77,10 +84,6 @@ const CarItem = ({ id }:CarItemsProps) => {
       </Grid>
     );
   }
-  const itemStyle = clsx({
-    [styles.Items_Block]: true,
-    [styles.Viewed]: item.viewed,
-  });
   const carPhoto = item?.carPhoto ? `http://localhost:5000/cars/${item.carPhoto}` : 'http://localhost:5000/noPhoto.jpg';
   const likeButton = item.liked
     ? <FavoriteIcon sx={{ color: red[900] }} /> : <FavoriteBorderIcon />;
@@ -93,7 +96,12 @@ const CarItem = ({ id }:CarItemsProps) => {
           className={styles.Items_Block__Close}
         />
         <label htmlFor="icon-button-file">
-          <Input className={styles.Items_Block__Upload} id="icon-button-file" type="file" />
+          <Input
+            onChange={(e) => changeHandler(e)}
+            className={styles.Items_Block__Upload}
+            id="icon-button-file"
+            type="file"
+          />
           <IconButton color="success" aria-label="upload picture" component="span">
             Загрузить Фотографию
             {' '}
@@ -101,7 +109,8 @@ const CarItem = ({ id }:CarItemsProps) => {
           </IconButton>
         </label>
       </Modal>
-      <Card className={itemStyle} sx={{ display: 'flex', justifyContent: 'space-between', mixWidth: 245 }}>
+
+      <Card className={styles.Items_Block} sx={{ display: 'flex', justifyContent: 'space-between', mixWidth: 245 }}>
         <CardMedia
           component="img"
           sx={{ maxWidth: 180, backgroundColor: green[300] }}
@@ -147,11 +156,14 @@ const CarItem = ({ id }:CarItemsProps) => {
                     Подробнее
                   </MenuItem>
                 </Link>
+                {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN'))
+                && (
                 <MenuItem onClick={openModal}>
                   Загрузить фоторафию
                   {' '}
                   <DownloadIcon />
                 </MenuItem>
+                )}
               </Menu>
             </Typography>
             <Link href={`/profile/${item.userId}`}>
@@ -178,11 +190,13 @@ const CarItem = ({ id }:CarItemsProps) => {
             <IconButton onClick={() => changeLiked(item.id)} aria-label="share">
               {likeButton}
             </IconButton>
+            {item.viewed
+            && (
+            <IconButton disabled>
+              <PreviewIcon sx={{ color: green[300] }} />
+            </IconButton>
+            )}
           </CardContent>
-          <Box sx={{
-            display: 'flex', alignItems: 'center', pl: 1, pb: 1,
-          }}
-          />
         </Box>
 
       </Card>
