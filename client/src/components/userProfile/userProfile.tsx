@@ -27,11 +27,15 @@ const userProfile = ({ user }:UserProfileProps) => {
   const delUserAvatar = () => {
     deleteUserAvatar();
   };
-  const userAvatar = user?.avatar
+  const userAvatar = (user?.avatar && user._id !== userData._id)
     ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" />
     : null;
 
-  const uploadAvatar = (user?._id === userData?._id && !user?.avatar) ? (
+  const loginUserAvatar = (userData?.avatar && user._id === userData._id)
+    ? <img alt={userData.userName} src={`http://localhost:5000/${userData.avatar}`} height="150" />
+    : null;
+
+  const uploadAvatar = (user?._id === userData?._id && !userData?.avatar) ? (
     <label htmlFor="icon-button-file">
       Загрузить Фотографию
       <Input onChange={(e) => changeHandler(e)} id="icon-button-file" type="file" />
@@ -45,12 +49,12 @@ const userProfile = ({ user }:UserProfileProps) => {
     <div className={styles.Profile_Block}>
       <Grid container spacing={5}>
         <Grid className={styles.Profile_Block__Avatar} item md={12} sm={12} lg={12} xs={12}>
-
+          {loginUserAvatar}
           {userAvatar}
           {uploadAvatar}
         </Grid>
         <Grid item md={12} sm={12} lg={12} xs={12}>
-          {userAvatar && user?._id === userData?._id && (
+          {loginUserAvatar && user?._id === userData?._id && (
           <Button onClick={() => delUserAvatar()} variant="outlined" color="error" startIcon={<DeleteIcon />}>
             Delete
           </Button>

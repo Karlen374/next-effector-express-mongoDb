@@ -1,4 +1,4 @@
 export default  {
-  secret: "SECRET_KEY_RANDOM",
+  secret: "RED",
   staticPath:"C:\\Users\\svary\\OneDrive\\Рабочий стол\\Red Collar\\next1\\server\\static"
 }

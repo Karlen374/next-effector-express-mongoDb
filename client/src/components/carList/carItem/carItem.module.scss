@@ -1,27 +1,32 @@
 .Items_Block{
-  border:1px solid black;
-  padding:10px;
-  border-radius: 20px;
   &__Author{
     text-decoration: underline;
     cursor:pointer;   
   }
-  &__Like__Btn{
-    border: none;
-    z-index:1;
-  }
-  &__Edit__Btn{
-    margin-left:10px;
-  }
-  span{
-    color:red;
-  }
   a{
     text-decoration: none;
   }
+  &__Close{
+    margin-left: 90%;
+    cursor: pointer;
+    :hover{
+      color: rgb(180, 33, 33);
+    }
+  }
+  &__Photo{
+    display: table-cell;
+    vertical-align: middle;
+    background-color: rgb(139, 129, 129); 
+  }
+  &__Upload{
+    display: none;
+    span{
+      color:#1b5e20;
+    }
+  }
 }
 .Viewed{
-  background-color: rgb(155, 148, 148);
+  background-color: rgb(70, 65, 65);
 }
 
 

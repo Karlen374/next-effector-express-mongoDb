@@ -80,7 +80,15 @@ export const $userData = createStore<IUser>(null)
     return user;
   })
   .on(uploadUserAvatar.doneData, (_, user) => {
-    getLocalStorage()?.setItem('data', JSON.stringify(user));
+    const newData = JSON.parse(getLocalStorage()?.getItem('data'));
+    newData.avatar = user.avatar;
+    getLocalStorage()?.setItem('data', JSON.stringify(newData));
+    return user;
+  })
+  .on(deleteUserAvatar.doneData, (_, user) => {
+    const newData = JSON.parse(getLocalStorage()?.getItem('data'));
+    newData.avatar = null;
+    getLocalStorage()?.setItem('data', JSON.stringify(newData));
     return user;
   })
   .on(loadUserData, () => JSON.parse(getLocalStorage()?.getItem('data')))

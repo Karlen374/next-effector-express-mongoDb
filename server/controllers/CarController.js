@@ -1,5 +1,6 @@
 import Car from "../models/Car.js";
-
+import config from "../config.js";
+import { v4 as uuidv4 } from 'uuid';
 
 class CarController {
   async create (req, res) {
@@ -74,6 +75,20 @@ class CarController {
       res.status(500).json(e)
     }
   }
+  async uploadCarPhoto(req, res) {
+    try {
+        const file = req.files.file
+        const car = await Car.findById(req.headers.carid)
+        const carPhotoName = uuidv4() + ".jpg"
+        file.mv(config.staticPath + "\\cars\\" + carPhotoName)
+        car.carPhoto = carPhotoName
+        await car.save()
+        return res.json(car)
+    } catch (e) {
+        console.log(e)
+        return res.status(400).json({message: 'ошибка загрузки Фотографии'})
+    }
+  }
 }
-
+//40ab3b08-129d-4270-b2b8-12d73f953046
 export default new CarController();

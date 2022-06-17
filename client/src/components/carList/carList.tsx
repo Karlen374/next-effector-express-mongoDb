@@ -30,7 +30,7 @@ const CarList = ({ data }:CarListProps) => {
         <Grid container spacing={3}>
           <div className="css-zow5z4-MuiGrid-root">
             {transitions(({ opacity }, item) => (
-              <Grid item md={4} sm={6} lg={4} xs={12}>
+              <Grid item md={6} sm={6} lg={4} xs={12}>
                 <animated.div
                   style={{
                     opacity: opacity.to({ output: [0.2, 1], range: [0, 1] }),

@@ -3,6 +3,7 @@ import CarController from "../controllers/CarController.js";
 import ModelController from "../controllers/ModelController.js";
 import BrandController from "../controllers/BrandController.js";
 
+
 const router = new Router()
 
 router.post('/cars', CarController.create)
@@ -12,6 +13,7 @@ router.put('/cars', CarController.update)
 router.put('/carLike', CarController.changeLike)
 router.put('/carViewed', CarController.changeViewed)
 router.get('/getIdArray', CarController.getIdArray)
+router.post('/addPhoto',CarController.uploadCarPhoto)
 
 router.post('/models', ModelController.create)
 router.put('/models', ModelController.getModelsByInputText)

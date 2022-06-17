@@ -9,4 +9,5 @@ export interface ICar {
   liked: boolean;
   userId:string;
   userName:string;
+  carPhoto?:string;
 }

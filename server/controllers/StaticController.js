@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import config from '../config.js'
 import User from '../models/user.js'
 import fs from 'fs';
+import Car from '../models/Car.js';
 
 class StaticController {
   async uploadAvatar(req, res) {
@@ -30,6 +31,7 @@ class StaticController {
         return res.status(400).json({message: 'ошибка удаления аватара'})
     }
   }
+ 
 }
 
 export default new StaticController();
