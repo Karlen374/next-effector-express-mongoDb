@@ -36,6 +36,14 @@ export const uploadCarPhoto = createEffect(async ({ file, carId }) => {
   return res;
 });
 
+export const deleteCarPhoto = createEffect(async (carId: string) => {
+  const headers = {
+    carId,
+  };
+  const res = await request('http://localhost:5000/api/delPhoto', 'DELETE', null, headers);
+  return res;
+});
+
 export const loadCars = createEvent<ICar[]>();
 
 export const $cars = createStore<ICar[]>([])

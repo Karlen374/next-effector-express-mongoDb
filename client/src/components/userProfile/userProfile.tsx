@@ -69,7 +69,6 @@ const userProfile = ({ user }:UserProfileProps) => {
             {' '}
             {user.email}
           </div>
-
         </Grid>
       </Grid>
       <h2>

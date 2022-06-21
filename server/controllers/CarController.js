@@ -1,6 +1,7 @@
 import Car from "../models/Car.js";
 import config from "../config.js";
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 
 class CarController {
   async create (req, res) {
@@ -87,6 +88,18 @@ class CarController {
     } catch (e) {
         console.log(e)
         return res.status(400).json({message: 'ошибка загрузки Фотографии'})
+    }
+  }
+  async deleteCarPhoto(req, res) {
+    try {   
+        const car = await Car.findById(req.headers.carid)
+        fs.unlinkSync(config.staticPath + "\\cars\\" + car.carPhoto)
+        car.carPhoto = null
+        await car.save()
+        return res.json(car)
+    } catch (e) {
+        console.log(e)
+        return res.status(400).json({message: 'ошибка удаления фотографии'})
     }
   }
 }

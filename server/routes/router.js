@@ -14,6 +14,7 @@ router.put('/carLike', CarController.changeLike)
 router.put('/carViewed', CarController.changeViewed)
 router.get('/getIdArray', CarController.getIdArray)
 router.post('/addPhoto',CarController.uploadCarPhoto)
+router.delete('/delPhoto',CarController.deleteCarPhoto)
 
 router.post('/models', ModelController.create)
 router.put('/models', ModelController.getModelsByInputText)

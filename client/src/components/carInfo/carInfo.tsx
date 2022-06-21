@@ -1,10 +1,22 @@
 import { useEffect, useState } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import IconButton from '@mui/material/IconButton';
 import { red } from '@mui/material/colors';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
 import { ICar } from 'src/types/ICar';
-import { changeLiked } from 'src/models/cars/cars';
+import { changeLiked, deleteCarPhoto } from 'src/models/cars/cars';
+import { carPhotoUploadModal } from 'src/models/modal/modal';
+import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
+import { useStore } from 'effector-react';
+import { $userData } from 'src/models/authorization/authorization';
 import styles from './carInfo.module.scss';
 
 interface CarInfoProps {
@@ -12,7 +24,8 @@ interface CarInfoProps {
 }
 const CarInfo = ({ car }:CarInfoProps) => {
   const [carInfo, setCarInfo] = useState<ICar>();
-  const [liked, setLiked] = useState<Boolean>();
+  const [liked, setLiked] = useState<boolean>();
+  const userData = useStore($userData);
   useEffect(() => {
     setCarInfo(car);
     setLiked(car.liked);
@@ -24,41 +37,48 @@ const CarInfo = ({ car }:CarInfoProps) => {
   };
   const likeButton = !liked
     ? <FavoriteBorderIcon /> : <FavoriteIcon sx={{ color: red[900] }} />;
+  const carPhoto = car?.carPhoto ? `http://localhost:5000/cars/${car.carPhoto}` : 'http://localhost:5000/noPhoto.jpg';
 
+  const carPhotoChange = car?.carPhoto
+    ? (
+      <IconButton onClick={() => deleteCarPhoto(car.id)}>
+        <DeleteIcon />
+      </IconButton>
+    )
+    : (
+      <IconButton onClick={() => carPhotoUploadModal(true)}>
+        <DownloadIcon />
+      </IconButton>
+    );
+  const viewCarPhotoChange = userData?._id === car?.userId ? carPhotoChange : null;
   return (
-    <div className={styles.Car_Info}>
-
-      <div className={styles.Car_Info__Img}>Картинка</div>
-
-      <div>
-        <IconButton
-          onClick={() => changeCarLike()}
-          aria-label="add to favorites"
-        >
-          {likeButton}
-        </IconButton>
-        <div>
-          Марка-
-          {carInfo?.brand}
-        </div>
-        <div>
-          Название-
-          {carInfo?.model}
-        </div>
-        <div>
-          Год Выпуска-
-          {carInfo?.releaseYear}
-        </div>
-        <div>
-          Цена-
-          {carInfo?.price}
-        </div>
-        <div>
-          Описание-
-          {carInfo?.description}
-        </div>
-      </div>
-    </div>
+    <>
+      <CarPhotoUpload id={car.id} />
+      <Card className={styles.Car_Info} sx={{ maxWidth: 545 }}>
+        <CardHeader
+          title={`${car?.brand} ${car?.model}`}
+          subheader={`Год Выпуска - ${car?.releaseYear}, цена - ${car?.price}, Автор - ${car?.userName} `}
+        />
+        <CardMedia
+          component="img"
+          image={carPhoto}
+          alt={car?.brand}
+        />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            Описание:
+            {' '}
+            {car?.description}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <IconButton onClick={changeCarLike} aria-label="add to favorites">
+            {likeButton}
+          </IconButton>
+          {viewCarPhotoChange}
+        </CardActions>
+      </Card>
+    </>
   );
 };
 

@@ -9,10 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DownloadIcon from '@mui/icons-material/Download';
 import PreviewIcon from '@mui/icons-material/Preview';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import EditIcon from '@mui/icons-material/Edit';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { Input } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -22,16 +19,11 @@ import { red, green } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { selectEditCar } from 'src/models/editCar/editCar';
-import { changeAddFormViewedModal } from 'src/models/modal/modal';
-import {
-  changeLiked,
-  changeViewedCar,
-  $cars,
-  uploadCarPhoto,
-} from 'src/models/cars/cars';
+import { carPhotoUploadModal, changeAddFormViewedModal } from 'src/models/modal/modal';
+import { changeLiked, changeViewedCar, $cars } from 'src/models/cars/cars';
 import { ICar } from 'src/types/ICar';
 import { $userData } from 'src/models/authorization/authorization';
-import Modal from 'src/components/shared/modal/modal';
+import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
 import styles from './carItem.module.scss';
 
 interface CarItemsProps {
@@ -42,7 +34,6 @@ const CarItem = ({ id }:CarItemsProps) => {
   const userData = useStore($userData);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [modal, setModal] = useState<boolean>(false);
   const [item, setItem] = useState<ICar>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -53,7 +44,7 @@ const CarItem = ({ id }:CarItemsProps) => {
   };
   const openModal = () => {
     setAnchorEl(null);
-    setModal(true);
+    carPhotoUploadModal(true);
   };
 
   const editCarInfo = () => {
@@ -65,11 +56,6 @@ const CarItem = ({ id }:CarItemsProps) => {
     const res = await fetch(`http://localhost:5000/api/cars/${id}`);
     const data = await res.json();
     setItem(data);
-  };
-  const changeHandler = (e) => {
-    const file = e.target.files[0];
-    uploadCarPhoto({ file, carId: item.id });
-    setModal(false);
   };
   useEffect(() => {
     loadData();
@@ -90,26 +76,8 @@ const CarItem = ({ id }:CarItemsProps) => {
 
   return (
     <>
-      <Modal active={modal}>
-        <CloseOutlinedIcon
-          onClick={() => setModal(false)}
-          className={styles.Items_Block__Close}
-        />
-        <label htmlFor="icon-button-file">
-          <Input
-            onChange={(e) => changeHandler(e)}
-            className={styles.Items_Block__Upload}
-            id="icon-button-file"
-            type="file"
-          />
-          <IconButton color="success" aria-label="upload picture" component="span">
-            Загрузить Фотографию
-            {' '}
-            <CameraAltIcon sx={{ color: green[900] }} />
-          </IconButton>
-        </label>
-      </Modal>
-
+      {((userData?._id === item.userId) || (userData?.role === 'ADMIN'))
+      && <CarPhotoUpload id={id} />}
       <Card className={styles.Items_Block} sx={{ display: 'flex', justifyContent: 'space-between', mixWidth: 245 }}>
         <CardMedia
           component="img"
@@ -156,7 +124,7 @@ const CarItem = ({ id }:CarItemsProps) => {
                     Подробнее
                   </MenuItem>
                 </Link>
-                {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN'))
+                {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN')) && !item?.carPhoto
                 && (
                 <MenuItem onClick={openModal}>
                   Загрузить фоторафию
