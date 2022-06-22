@@ -14,15 +14,15 @@ export const saveEditCar = createEffect(async (editCar:ICar) => {
   return res;
 });
 
-export const changeLiked = createEffect(async (id:string) => {
+export const changeLiked = createEffect(async ({ carId, userId }) => {
   const url = 'http://localhost:5000/api/carLike';
-  const res = await request(url, 'PUT', JSON.stringify({ _id: id }));
+  const res = await request(url, 'PUT', JSON.stringify({ carId, userId }));
   return res;
 });
 
-export const changeViewedCar = createEffect(async (id:string) => {
+export const changeViewedCar = createEffect(async ({ carId, userId }) => {
   const url = 'http://localhost:5000/api/carViewed';
-  const res = await request(url, 'PUT', JSON.stringify({ _id: id }));
+  const res = await request(url, 'PUT', JSON.stringify({ carId, userId }));
   return res;
 });
 

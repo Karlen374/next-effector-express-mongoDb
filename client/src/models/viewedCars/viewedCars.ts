@@ -1,6 +1,7 @@
 import { combine } from 'effector';
 import { $searchParams } from 'src/models/searchParams/searchParams';
 import { $cars } from 'src/models/cars/cars';
+import { getLocalStorage } from 'src/hooks/hooks';
 
 export const $viewedCars = combine($cars, $searchParams, (cars, searchParams) => {
   let filteredCars = cars;
@@ -17,7 +18,9 @@ export const $viewedCars = combine($cars, $searchParams, (cars, searchParams) =>
     });
   }
   if (searchParams.liked) {
-    filteredCars = filteredCars.filter((item) => item.liked);
+    filteredCars = filteredCars.filter((item) => {
+      return item.likedUsersId.includes(JSON.parse(getLocalStorage()?.getItem('data'))._id);
+    });
   }
   if (searchParams.changeFilter) {
     if (searchParams.changeFilter === '10') {

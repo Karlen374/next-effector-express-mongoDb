@@ -42,6 +42,7 @@ const CarItem = ({ id }:CarItemsProps) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const openModal = () => {
     setAnchorEl(null);
     carPhotoUploadModal(true);
@@ -70,10 +71,14 @@ const CarItem = ({ id }:CarItemsProps) => {
       </Grid>
     );
   }
+
   const carPhoto = item?.carPhoto ? `http://localhost:5000/cars/${item.carPhoto}` : 'http://localhost:5000/noPhoto.jpg';
-  const likeButton = item.liked
+
+  const likeButton = item.likedUsersId.includes(userData?._id)
     ? <FavoriteIcon sx={{ color: red[900] }} /> : <FavoriteBorderIcon />;
 
+  const viewedIcon = item.viewedUsersId.includes(userData?._id)
+    ? <PreviewIcon sx={{ color: green[300] }} /> : <PreviewIcon />;
   return (
     <>
       {((userData?._id === item.userId) || (userData?.role === 'ADMIN'))
@@ -120,7 +125,7 @@ const CarItem = ({ id }:CarItemsProps) => {
                 }}
               >
                 <Link href={`/${item.id}`}>
-                  <MenuItem onClick={() => changeViewedCar(item.id)}>
+                  <MenuItem onClick={() => changeViewedCar({ carId: item.id, userId: userData?._id })}>
                     Подробнее
                   </MenuItem>
                 </Link>
@@ -155,15 +160,24 @@ const CarItem = ({ id }:CarItemsProps) => {
             <EditIcon />
           </IconButton>
           )}
-            <IconButton onClick={() => changeLiked(item.id)} aria-label="share">
-              {likeButton}
-            </IconButton>
-            {item.viewed
-            && (
-            <IconButton disabled>
-              <PreviewIcon sx={{ color: green[300] }} />
-            </IconButton>
-            )}
+            {userData
+          && (
+            <>
+              <IconButton onClick={() => changeLiked({ carId: item.id, userId: userData?._id })} aria-label="share">
+                {likeButton}
+                <Typography variant="subtitle2" color="text.secondary" component="p">
+                  {item.likedUsersId.length}
+                </Typography>
+              </IconButton>
+
+              <IconButton disabled>
+                {viewedIcon}
+                <Typography variant="subtitle2" color="text.secondary" component="p">
+                  {item.viewedUsersId.length}
+                </Typography>
+              </IconButton>
+            </>
+          )}
           </CardContent>
         </Box>
 

@@ -2,6 +2,7 @@ import Car from "../models/Car.js";
 import config from "../config.js";
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import { Certificate } from "crypto";
 
 class CarController {
   async create (req, res) {
@@ -47,9 +48,12 @@ class CarController {
   }
   async changeLike (req,res) {
     try {
-      const carId = req.body
+      const carId = req.body.carId
+      const userId= req.body.userId
       const car = await Car.findById(carId)
-      car.liked = !car.liked;
+      const check = car.likedUsersId.includes(userId);
+      if (!check) car.likedUsersId.push(userId);
+      else car.likedUsersId = car.likedUsersId.filter(item => item !== userId);
       const updatedCar = await Car.findByIdAndUpdate(car._id,car,{new:true})
       return res.status(200).json(updatedCar)
     } catch (e) {
@@ -58,9 +62,11 @@ class CarController {
   }
   async changeViewed (req,res) {
     try {
-      const carId = req.body
+      const carId = req.body.carId
+      const userId= req.body.userId
       const car = await Car.findById(carId)
-      car.viewed = true;
+      const check = car.viewedUsersId.includes(userId);
+      if (!check) car.viewedUsersId.push(userId);
       const updatedCar = await Car.findByIdAndUpdate(car._id,car,{new:true})
       return res.status(200).json(updatedCar)
     } catch (e) {

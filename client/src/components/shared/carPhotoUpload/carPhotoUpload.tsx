@@ -60,7 +60,7 @@ const CarPhotoUpload = ({ id }:CarPhotoProps) => {
       {drag
         ? (
           <div
-            className={styles.Car_Info__DropArea}
+            className={styles.Car_Photo_Drop__DropArea}
             onDragStart={(e) => dragStartHandler(e)}
             onDragLeave={(e) => dragLeaveHandler(e)}
             onDragOver={(e) => dragStartHandler(e)}

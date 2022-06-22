@@ -28,11 +28,11 @@ const CarInfo = ({ car }:CarInfoProps) => {
   const userData = useStore($userData);
   useEffect(() => {
     setCarInfo(car);
-    setLiked(car.liked);
+    setLiked(car.likedUsersId.includes(userData?._id));
   }, [car]);
 
   const changeCarLike = () => {
-    changeLiked(carInfo?.id);
+    changeLiked({ carId: carInfo?.id, userId: userData?._id });
     setLiked(!liked);
   };
   const likeButton = !liked
@@ -53,7 +53,7 @@ const CarInfo = ({ car }:CarInfoProps) => {
   const viewCarPhotoChange = userData?._id === car?.userId ? carPhotoChange : null;
   return (
     <>
-      <CarPhotoUpload id={car.id} />
+      <CarPhotoUpload id={car?.id} />
       <Card className={styles.Car_Info} sx={{ maxWidth: 545 }}>
         <CardHeader
           title={`${car?.brand} ${car?.model}`}
@@ -72,9 +72,12 @@ const CarInfo = ({ car }:CarInfoProps) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
+          {userData
+          && (
           <IconButton onClick={changeCarLike} aria-label="add to favorites">
             {likeButton}
           </IconButton>
+          )}
           {viewCarPhotoChange}
         </CardActions>
       </Card>

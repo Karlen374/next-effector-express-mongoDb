@@ -27,11 +27,11 @@ const userProfile = ({ user }:UserProfileProps) => {
   const delUserAvatar = () => {
     deleteUserAvatar();
   };
-  const userAvatar = (user?.avatar && user._id !== userData._id)
+  const userAvatar = (user?.avatar && user?._id !== userData?._id)
     ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" />
     : null;
 
-  const loginUserAvatar = (userData?.avatar && user._id === userData._id)
+  const loginUserAvatar = (userData?.avatar && user?._id === userData?._id)
     ? <img alt={userData.userName} src={`http://localhost:5000/${userData.avatar}`} height="150" />
     : null;
 

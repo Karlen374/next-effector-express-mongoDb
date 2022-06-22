@@ -114,7 +114,6 @@ const CreateAdvertisement = () => {
       releaseYear: +releaseYear,
       description,
       viewed: false,
-      liked: false,
       userId: userData._id,
       userName: userData.userName,
     };

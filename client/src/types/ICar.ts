@@ -6,8 +6,9 @@ export interface ICar {
   releaseYear: number;
   description: string;
   viewed: boolean;
-  liked: boolean;
   userId:string;
   userName:string;
   carPhoto?:string;
+  likedUsersId?:Array<string>;
+  viewedUsersId?:Array<string>;
 }
