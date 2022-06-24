@@ -1,30 +1,38 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Link from 'next/link';
-import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { grey } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
-import styles from './appHeader.module.scss';
-import { changeAddFormViewedModal, changeLoginFormViewedModal } from '../../models/modal/modal';
-import { setSelectEditCar } from '../../models/editCar/editCar';
-import { $Alert } from '../../models/errorAlert/errorAlert';
-import LoginForm from '../AuthorizationForm/LoginForm/loginForm';
-import RegistrationForm from '../AuthorizationForm/RegistrationForm/RegistartionForm';
+import {
+  $loginModal,
+  $registrationModal,
+  changeAddFormViewedModal,
+  changeLoginFormViewedModal,
+} from 'src/models/modal/modal';
+import { setSelectEditCar } from 'src/models/editCar/editCar';
+import { $Alert } from 'src/models/errorAlert/errorAlert';
+import LoginForm from 'src/components/AuthorizationForm/LoginForm/loginForm';
+import RegistrationForm from 'src/components/AuthorizationForm/RegistrationForm/RegistrationForm';
+import Modal from 'src/components/shared/modal/modal';
 import {
   $registrationMessage,
   $userData,
   clearUserData,
   loadUserData,
-} from '../../models/authorization/authorization';
+} from 'src/models/authorization/authorization';
+import styles from './appHeader.module.scss';
+import AlertWarning from '../shared/alertWarning/alertWarning';
 
 const AppHeader = () => {
   const alert = useStore($Alert);
   const registrationMessage = useStore($registrationMessage);
   const userData = useStore($userData);
+  const loginModal = useStore($loginModal);
+  const registrationModal = useStore($registrationModal);
   const openModalAddForm = () => {
     setSelectEditCar();
     changeAddFormViewedModal(true);
@@ -35,8 +43,8 @@ const AppHeader = () => {
   }, []);
 
   const registrationAlert = (registrationMessage === 'success')
-    ? <Alert severity="success" variant="filled" sx={{ width: '100%' }}>Регистрация прошла успешно </Alert>
-    : <Alert severity="error" variant="filled" sx={{ width: '100%' }}>Введите корректные Данные !!! </Alert>;
+    ? <AlertWarning severity="success" variant="filled" text="Регистрация прошла успешно" />
+    : <AlertWarning severity="error" variant="filled" text="Введите корректные Данные !!!" />;
 
   const adminPanelButton = (userData?.role === 'ADMIN')
     ? (
@@ -79,7 +87,11 @@ const AppHeader = () => {
 
   return (
     <div className={styles.Home_Page}>
-      {alert && <Alert className={styles.Home_Page_Error} severity="error">Что-то пошло не так!</Alert>}
+      {alert && (
+        <div>
+          <AlertWarning severity="error" variant="filled" text="Что-то пошло не так" />
+        </div>
+      )}
       {registrationMessage && registrationAlert}
       <Grid container columnSpacing={{ lg: 90, md: 50 }} rowSpacing={3}>
         <Grid item lg={6} md={6} sm={6} xs={12}>
@@ -101,8 +113,12 @@ const AppHeader = () => {
           {adminPanelButton}
         </Grid>
       </Grid>
-      <LoginForm />
-      <RegistrationForm />
+      <Modal active={loginModal}>
+        <LoginForm />
+      </Modal>
+      <Modal active={registrationModal}>
+        <RegistrationForm />
+      </Modal>
     </div>
   );
 };

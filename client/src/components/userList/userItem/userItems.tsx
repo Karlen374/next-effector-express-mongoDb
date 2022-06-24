@@ -26,10 +26,10 @@ const UserItems = ({ data }: AdminPanelPage) => {
             id -
             {item._id}
           </div>
-          <div>
+          {/* <div>
             Роль -
             {item.roles}
-          </div>
+          </div> */}
 
         </div>
       </Grid>

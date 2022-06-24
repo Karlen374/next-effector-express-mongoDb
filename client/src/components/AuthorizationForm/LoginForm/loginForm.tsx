@@ -1,19 +1,16 @@
 import { Grid, TextField } from '@mui/material';
-import { useStore } from 'effector-react';
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {
-  $loginModal,
   changeLoginFormViewedModal,
   changeRegistrationFormViewedModal,
 } from 'src/models/modal/modal';
-import Modal from 'src/components/shared/modal/modal';
+
 import { userLogin } from 'src/models/authorization/authorization';
 import styles from './LoginForm.module.scss';
 
 const LoginForm = () => {
-  const loginModal = useStore($loginModal);
   const {
     register,
     formState: { errors },
@@ -36,7 +33,7 @@ const LoginForm = () => {
     changeLoginFormViewedModal(false);
   };
   return (
-    <Modal active={loginModal}>
+    <>
       <CloseOutlinedIcon onClick={() => closeLoginForm()} className={styles.Login_Form__Close} />
       <h2 className={styles.Login_Form__Header}>Вход</h2>
       <form onSubmit={handleSubmit(LoginUser)}>
@@ -86,7 +83,7 @@ const LoginForm = () => {
           </div>
         </Grid>
       </form>
-    </Modal>
+    </>
   );
 };
 

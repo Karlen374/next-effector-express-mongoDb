@@ -48,6 +48,7 @@
          "no-param-reassign": 0,
          "no-useless-catch": 0,
          "no-underscore-dangle":0,
-         "jsx-a11y/label-has-associated-control":0
+         "jsx-a11y/label-has-associated-control":0,
+         "import/no-anonymous-default-export": "off"
     }
 }

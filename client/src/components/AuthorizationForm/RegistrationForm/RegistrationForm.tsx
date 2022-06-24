@@ -1,19 +1,15 @@
 import { Grid, TextField } from '@mui/material';
-import { useStore } from 'effector-react';
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {
-  $registrationModal,
   changeLoginFormViewedModal,
   changeRegistrationFormViewedModal,
 } from '../../../models/modal/modal';
-import Modal from '../../shared/modal/modal';
 import styles from './RegistrationForm.module.scss';
 import { userRegistration } from '../../../models/authorization/authorization';
 
 const RegistrationForm = () => {
-  const registrationModal = useStore($registrationModal);
   const {
     register,
     formState: { errors },
@@ -37,7 +33,7 @@ const RegistrationForm = () => {
     changeRegistrationFormViewedModal(false);
   };
   return (
-    <Modal active={registrationModal}>
+    <>
       <CloseOutlinedIcon
         onClick={() => closeRegistrationForm()}
         className={styles.Registration_Form__Close}
@@ -101,7 +97,7 @@ const RegistrationForm = () => {
           </div>
         </Grid>
       </form>
-    </Modal>
+    </>
   );
 };
 
