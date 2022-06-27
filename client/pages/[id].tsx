@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import CarInfo from '../components/carInfo/carInfo';
-import MainLayout from '../layouts/MainLayout';
-import { ICar } from '../types/ICar';
+import CarInfo from 'src/components/carInfo/carInfo';
+import MainLayout from 'src/layouts/MainLayout';
+import { ICar } from 'src/types/ICar';
 
 export async function getServerSideProps({ params }) {
   const res = await fetch(`http://localhost:5000/api/cars/${params.id}`);
