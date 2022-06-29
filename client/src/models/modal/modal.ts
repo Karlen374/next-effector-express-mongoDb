@@ -19,3 +19,8 @@ export const carPhotoUploadModal = createEvent<boolean>();
 
 export const $carUpload = createStore<boolean>(false)
   .on(carPhotoUploadModal, (_, modal) => modal);
+
+export const changeChatModal = createEvent<boolean>();
+
+export const $chatModal = createStore<boolean>(false)
+  .on(changeChatModal, (_, modal) => modal);

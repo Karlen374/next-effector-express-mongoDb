@@ -11,6 +11,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import PreviewIcon from '@mui/icons-material/Preview';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,11 +20,13 @@ import { red, green } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { selectEditCar } from 'src/models/editCar/editCar';
-import { carPhotoUploadModal, changeAddFormViewedModal } from 'src/models/modal/modal';
+import { carPhotoUploadModal, changeAddFormViewedModal, changeChatModal } from 'src/models/modal/modal';
 import { changeLiked, changeViewedCar, $cars } from 'src/models/cars/cars';
 import { ICar } from 'src/types/ICar';
 import { $userData } from 'src/models/authorization/authorization';
 import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
+import { Button } from '@mui/material';
+import { getCurrentChatRecipientName, getCurrentUsersMessages } from 'src/models/chat/chat';
 import styles from './carItem.module.scss';
 
 interface CarItemsProps {
@@ -52,7 +55,12 @@ const CarItem = ({ id }:CarItemsProps) => {
     selectEditCar(cars.filter((car) => car.id === id)[0]);
     changeAddFormViewedModal(true);
   };
-
+  const openChatModal = () => {
+    changeChatModal(true);
+    handleClose();
+    getCurrentUsersMessages({ senderId: userData._id, recipientId: item.userId });
+    getCurrentChatRecipientName({ senderId: userData._id, recipientId: item.userId, recipientName: item.userName });
+  };
   const loadData = async () => {
     const res = await fetch(`http://localhost:5000/api/cars/${id}`);
     const data = await res.json();
@@ -83,7 +91,7 @@ const CarItem = ({ id }:CarItemsProps) => {
     <>
       {((userData?._id === item.userId) || (userData?.role === 'ADMIN'))
       && <CarPhotoUpload id={id} />}
-      <Card className={styles.Items_Block} sx={{ display: 'flex', justifyContent: 'space-between', mixWidth: 245 }}>
+      <Card className={styles.Items_Block} sx={{ mixWidth: 245 }}>
         <CardMedia
           component="img"
           sx={{ maxWidth: 180, backgroundColor: green[300] }}
@@ -129,6 +137,11 @@ const CarItem = ({ id }:CarItemsProps) => {
                     Подробнее
                   </MenuItem>
                 </Link>
+                <MenuItem onClick={() => openChatModal()}>
+                  Написать
+                  {' '}
+                  <RateReviewIcon />
+                </MenuItem>
                 {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN')) && !item?.carPhoto
                 && (
                 <MenuItem onClick={openModal}>
@@ -139,12 +152,16 @@ const CarItem = ({ id }:CarItemsProps) => {
                 )}
               </Menu>
             </Typography>
+            {((userData?._id !== item.userId)
+            && (
             <Link href={`/profile/${item.userId}`}>
               <Typography className={styles.Items_Block__Author} variant="subtitle2" component="div">
                 Автор -
                 {item.userName}
               </Typography>
             </Link>
+            )
+            )}
             <Typography variant="subtitle2" color="text.secondary" component="div">
               Цена -
               {item.price}
@@ -156,9 +173,11 @@ const CarItem = ({ id }:CarItemsProps) => {
             </Typography>
             {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN'))
           && (
-          <IconButton onClick={() => editCarInfo()} aria-label="share">
-            <EditIcon />
-          </IconButton>
+          <Typography variant="subtitle2" color="text.secondary" component="div">
+            <Button onClick={() => editCarInfo()} size="small" variant="text" startIcon={<EditIcon />}>
+              Редактировать
+            </Button>
+          </Typography>
           )}
             {userData
           && (
@@ -169,7 +188,6 @@ const CarItem = ({ id }:CarItemsProps) => {
                   {item.likedUsersId.length}
                 </Typography>
               </IconButton>
-
               <IconButton disabled>
                 {viewedIcon}
                 <Typography variant="subtitle2" color="text.secondary" component="p">
@@ -180,7 +198,6 @@ const CarItem = ({ id }:CarItemsProps) => {
           )}
           </CardContent>
         </Box>
-
       </Card>
     </>
   );

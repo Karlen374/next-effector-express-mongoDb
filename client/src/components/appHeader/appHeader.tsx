@@ -8,6 +8,7 @@ import { useStore } from 'effector-react';
 import { useEffect } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {
+  $chatModal,
   $loginModal,
   $registrationModal,
   changeAddFormViewedModal,
@@ -17,6 +18,7 @@ import { setSelectEditCar } from 'src/models/editCar/editCar';
 import { $Alert } from 'src/models/errorAlert/errorAlert';
 import LoginForm from 'src/components/AuthorizationForm/LoginForm/loginForm';
 import RegistrationForm from 'src/components/AuthorizationForm/RegistrationForm/RegistrationForm';
+import Chat from 'src/components/Chat/Chat';
 import Modal from 'src/components/shared/modal/modal';
 import {
   $registrationMessage,
@@ -33,6 +35,7 @@ const AppHeader = () => {
   const userData = useStore($userData);
   const loginModal = useStore($loginModal);
   const registrationModal = useStore($registrationModal);
+  const chatModal = useStore($chatModal);
   const openModalAddForm = () => {
     setSelectEditCar();
     changeAddFormViewedModal(true);
@@ -118,6 +121,9 @@ const AppHeader = () => {
       </Modal>
       <Modal active={registrationModal}>
         <RegistrationForm />
+      </Modal>
+      <Modal active={chatModal}>
+        <Chat />
       </Modal>
     </div>
   );

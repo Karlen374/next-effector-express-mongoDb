@@ -1,7 +1,4 @@
-// import { $cars } from 'src/models/cars/cars';
-// import { $userData } from 'src/models/authorization/authorization';
 import CarItem from './carItem';
-// import styles from './carItem.module.scss';
 
 export default {
   title: 'CarItem',

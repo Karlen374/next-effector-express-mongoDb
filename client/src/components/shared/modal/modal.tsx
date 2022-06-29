@@ -2,6 +2,7 @@ import { CSSTransition } from 'react-transition-group';
 import clsx from 'clsx';
 import {
   changeAddFormViewedModal,
+  changeChatModal,
   changeLoginFormViewedModal,
   changeRegistrationFormViewedModal,
 } from 'src/models/modal/modal';
@@ -13,6 +14,7 @@ const Modal = ({ active, children }:ModalProps) => {
     changeAddFormViewedModal(false);
     changeLoginFormViewedModal(false);
     changeRegistrationFormViewedModal(false);
+    changeChatModal(false);
   };
 
   const modalClass = clsx({

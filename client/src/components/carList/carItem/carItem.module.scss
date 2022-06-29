@@ -1,4 +1,6 @@
 .Items_Block{
+  display: flex;
+  justify-content:space-between;
   &__Author{
     text-decoration: underline;
     cursor:pointer;   
