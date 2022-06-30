@@ -24,12 +24,9 @@ export const sendMessage = createEffect(async ({ senderId, recipientId, messageT
   );
   return res;
 });
-export const addMessageFromWebSocket = createEvent<IMessage>();
 
 export const $currentUsersChat = createStore<IMessage[]>([])
-  .on(getCurrentUsersMessages.doneData, (_, messages) => messages)
-  .on(sendMessage.doneData, (messages, message) => [...messages, message])
-  .on(addMessageFromWebSocket, (currentUsersChat, message) => [...currentUsersChat, message]);
+  .on(getCurrentUsersMessages.doneData, (_, messages) => messages);
 
 interface CurrentChatUsersData {
   senderId: string;

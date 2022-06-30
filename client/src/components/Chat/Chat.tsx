@@ -5,7 +5,12 @@ import Chip from '@mui/material/Chip';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import { $currentChatUsersData, $currentUsersChat, sendMessage } from 'src/models/chat/chat';
+import {
+  $currentChatUsersData,
+  $currentUsersChat,
+  getCurrentUsersMessages,
+  sendMessage,
+} from 'src/models/chat/chat';
 import { $userData } from 'src/models/authorization/authorization';
 import styles from './Chat.module.scss';
 
@@ -15,61 +20,82 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const userData = useStore($userData);
-  const socket = useRef();
+  const socket = useRef(null);
+  const timer = useRef(null);
+  const [write, setWrite] = useState(false);
+  const scrollRef = useRef(null);
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
-    console.log('we in useEffect');
+    scrollRef.current?.scrollIntoView();
+  }, [currentChat]);
+
+  useEffect(() => {
     setCurrentChat(currentUsersChat);
-    // @ts-ignore
+  }, [currentUsersChat]);
+
+  useEffect(() => {
     socket.current = new WebSocket('ws://localhost:5001');
-    // @ts-ignore
-    socket.current.onopen = () => {
-      console.log('открылся');
-    };
-    // @ts-ignore
     socket.current.onmessage = (event) => {
       if (JSON.parse(event.data).event !== 'write') {
         const messageFromSocket = JSON.parse(event.data);
-        sendMessage({
+        getCurrentUsersMessages({ senderId: messageFromSocket.senderId, recipientId: messageFromSocket.recipientId });
+        setCurrentChat([...currentUsersChat, {
           senderId: messageFromSocket.senderId,
           messageText: messageFromSocket.messageText,
-          recipientId: messageFromSocket.recipientId,
-        });
-        console.log(messageFromSocket);
-      } else console.log('write');
+          _id: messageFromSocket.id,
+        }]);
+      } else {
+        setWrite(true);
+        if (timer.current) {
+          clearTimeout(timer.current);
+        }
+
+        timer.current = setTimeout(() => {
+          setWrite(false);
+        }, 1000);
+      }
     };
-    // @ts-ignore
+
     socket.current.onclose = () => {
       setErrorMessage('произошла ошибка обновите страницу');
     };
-    // @ts-ignore
+
     socket.current.onerror = () => {
       setErrorMessage('произошла ошибка обновите страницу');
     };
   }, []);
 
   const sendOurMessage = () => {
-    // sendMessage({
-    //   senderId: currentChatUsersData.senderId,
-    //   messageText: message,
-    //   recipientId: currentChatUsersData.recipientId,
-    // });
+    sendMessage({
+      senderId: currentChatUsersData.senderId,
+      messageText: message,
+      recipientId: currentChatUsersData.recipientId,
+    });
     setCurrentChat([...currentChat, {
       senderId: currentChatUsersData.senderId,
       messageText: message,
       _id: String(Date.now()),
     }]);
-    const msg = {
+    const socketMessage = {
       senderId: currentChatUsersData.senderId,
       messageText: message,
       recipientId: currentChatUsersData.recipientId,
       id: Date.now(),
       event: 'message',
     };
-    // @ts-ignore
-    socket.current.send(JSON.stringify(msg));
+
+    socket.current.send(JSON.stringify(socketMessage));
     setMessage('');
+  };
+  const changeInputMessage = (e) => {
+    setMessage(e.target.value);
+    const socketMessage = {
+      messageText: 'Печатает...',
+      event: 'write',
+    };
+
+    socket.current.send(JSON.stringify(socketMessage));
   };
   return (
     <div className={styles.Chat}>
@@ -82,17 +108,26 @@ const Chat = () => {
       <div className={styles.Chat_Block}>
         {currentChat.map((item) => (
           <div
+            ref={scrollRef}
             className={item.senderId === userData._id
               ? styles.Chat_Block_Messages__send : styles.Chat_Block_Messages__received}
             key={item._id}
           >
-            <Chip label={item.messageText} color="primary" />
+            {item.senderId === userData._id
+              ? (
+                <Chip
+                  label={item.messageText}
+                  color="primary"
+                />
+              )
+              : <Chip label={item.messageText} />}
           </div>
         ))}
+        { write && <Chip label={`${currentChatUsersData.recipientName} Печатает...`} />}
       </div>
       <TextField
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => changeInputMessage(e)}
         label="Сообщение"
       />
       {message && (

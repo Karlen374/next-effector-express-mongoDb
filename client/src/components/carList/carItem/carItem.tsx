@@ -137,11 +137,13 @@ const CarItem = ({ id }:CarItemsProps) => {
                     Подробнее
                   </MenuItem>
                 </Link>
+                { (userData && userData?._id !== item.userId) && (
                 <MenuItem onClick={() => openChatModal()}>
                   Написать
                   {' '}
                   <RateReviewIcon />
                 </MenuItem>
+                )}
                 {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN')) && !item?.carPhoto
                 && (
                 <MenuItem onClick={openModal}>

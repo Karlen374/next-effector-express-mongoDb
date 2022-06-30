@@ -1,14 +1,31 @@
 .Chat_Header{
   display: flex;
   justify-content: right;
-  max-height:400px;
 }
+
 .Chat_Block{
-  border:1px solid black;
-  border-radius:10px;
-  margin-bottom: 10px;
+  max-height:400px;
+  background-color: rgb(247, 242, 242);
+  margin:10px;
+  border-radius:3px;
   padding:20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgb(225, 219, 219);
+    &-thumb {
+      background-color: rgb(106, 108, 116);
+      width: 10px;
+    }
+  }
   &_Messages{
+    & div {
+      background: rgb(63,94,251);
+      background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    }
     &__send{
       display:flex;
       justify-content: right;
