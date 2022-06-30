@@ -14,10 +14,8 @@
             "jsx": true
         },   
         "project": "./tsconfig.json",
-        "tsconfigRootDir": "client",   
         "ecmaVersion": "latest",
-        "sourceType": "module"
-       
+        "sourceType": "module"       
     },
     "plugins": [
         "react",
