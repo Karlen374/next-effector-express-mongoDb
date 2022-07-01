@@ -16,7 +16,6 @@ interface CarPhotoProps {
 const CarPhotoUpload = ({ id }:CarPhotoProps) => {
   const [drag, setDrag] = useState<boolean>(false);
   const carUpload = useStore($carUpload);
-
   const dragStartHandler = (e) => {
     e.preventDefault();
     setDrag(true);

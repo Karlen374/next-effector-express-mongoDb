@@ -1,6 +1,7 @@
 import { createEvent, createStore, createEffect } from 'effector';
 import { ICar } from 'src/types/ICar';
 import { request } from 'src/hooks/useHttp';
+import { getLocalStorage } from 'src/hooks/hooks';
 
 const apiBase = 'http://localhost:5000/api/cars';
 
@@ -78,6 +79,16 @@ export const $cars = createStore<ICar[]>([])
         return newCar;
       } else return item;
     });
+    getLocalStorage()?.setItem('currentCarPhoto', JSON.stringify(newCar.carPhoto));
+    return data;
+  })
+  .on(deleteCarPhoto.doneData, (cars, newCar) => {
+    const data = cars.map((item) => {
+      if (item.id === newCar.id) {
+        return newCar;
+      } else return item;
+    });
+    getLocalStorage()?.setItem('currentCarPhoto', JSON.stringify(null));
     return data;
   })
   .on(changeViewedCar.doneData, (cars, viewedCar) => {
@@ -86,5 +97,6 @@ export const $cars = createStore<ICar[]>([])
         return viewedCar;
       } else return item;
     });
+    getLocalStorage()?.setItem('currentCarPhoto', JSON.stringify(viewedCar.carPhoto || null));
     return data;
   });

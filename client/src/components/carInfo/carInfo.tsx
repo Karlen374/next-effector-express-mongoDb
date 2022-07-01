@@ -12,11 +12,12 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import { ICar } from 'src/types/ICar';
-import { changeLiked, deleteCarPhoto } from 'src/models/cars/cars';
+import { changeLiked, deleteCarPhoto, $cars } from 'src/models/cars/cars';
 import { carPhotoUploadModal } from 'src/models/modal/modal';
 import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
 import { useStore } from 'effector-react';
 import { $userData } from 'src/models/authorization/authorization';
+import { getLocalStorage } from 'src/hooks/hooks';
 import styles from './carInfo.module.scss';
 
 interface CarInfoProps {
@@ -25,11 +26,17 @@ interface CarInfoProps {
 const CarInfo = ({ car }:CarInfoProps) => {
   const [carInfo, setCarInfo] = useState<ICar>();
   const [liked, setLiked] = useState<boolean>();
+  const [currentCarPhoto, setCurrentCarPhoto] = useState<string>('');
+  const cars = useStore($cars);
   const userData = useStore($userData);
+
   useEffect(() => {
     setCarInfo(car);
     setLiked(car.likedUsersId.includes(userData?._id));
-  }, [car]);
+    if (car.userId === userData?._id) {
+      setCurrentCarPhoto(JSON.parse(getLocalStorage()?.getItem('currentCarPhoto') || ''));
+    } else setCurrentCarPhoto(car.carPhoto);
+  }, [cars]);
 
   const changeCarLike = () => {
     changeLiked({ carId: carInfo?.id, userId: userData?._id });
@@ -37,9 +44,10 @@ const CarInfo = ({ car }:CarInfoProps) => {
   };
   const likeButton = !liked
     ? <FavoriteBorderIcon /> : <FavoriteIcon sx={{ color: red[900] }} />;
-  const carPhoto = car?.carPhoto ? `http://localhost:5000/cars/${car.carPhoto}` : 'http://localhost:5000/noPhoto.jpg';
+  const carPhoto = currentCarPhoto
+    ? `http://localhost:5000/cars/${currentCarPhoto}` : 'http://localhost:5000/noPhoto.jpg';
 
-  const carPhotoChange = car?.carPhoto
+  const carPhotoChange = currentCarPhoto
     ? (
       <IconButton onClick={() => deleteCarPhoto(car.id)}>
         <DeleteIcon />

@@ -76,7 +76,7 @@ const userProfile = ({ user }:UserProfileProps) => {
         {' '}
         {user.userName}
       </h2>
-      <CarList data={currentUserCars} />
+      {user._id !== userData._id && <CarList data={currentUserCars} />}
     </div>
   );
 };

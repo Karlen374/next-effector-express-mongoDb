@@ -7,7 +7,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DownloadIcon from '@mui/icons-material/Download';
 import PreviewIcon from '@mui/icons-material/Preview';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
@@ -20,11 +19,10 @@ import { red, green } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import { useEffect, useState } from 'react';
 import { selectEditCar } from 'src/models/editCar/editCar';
-import { carPhotoUploadModal, changeAddFormViewedModal, changeChatModal } from 'src/models/modal/modal';
+import { changeAddFormViewedModal, changeChatModal } from 'src/models/modal/modal';
 import { changeLiked, changeViewedCar, $cars } from 'src/models/cars/cars';
 import { ICar } from 'src/types/ICar';
 import { $userData } from 'src/models/authorization/authorization';
-import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
 import { Button } from '@mui/material';
 import { getCurrentChatRecipientName, getCurrentUsersMessages } from 'src/models/chat/chat';
 import styles from './carItem.module.scss';
@@ -35,20 +33,15 @@ interface CarItemsProps {
 const CarItem = ({ id }:CarItemsProps) => {
   const cars = useStore($cars);
   const userData = useStore($userData);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [item, setItem] = useState<ICar>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const openModal = () => {
-    setAnchorEl(null);
-    carPhotoUploadModal(true);
   };
 
   const editCarInfo = () => {
@@ -88,73 +81,62 @@ const CarItem = ({ id }:CarItemsProps) => {
   const viewedIcon = item.viewedUsersId.includes(userData?._id)
     ? <PreviewIcon sx={{ color: green[300] }} /> : <PreviewIcon />;
   return (
-    <>
-      {((userData?._id === item.userId) || (userData?.role === 'ADMIN'))
-      && <CarPhotoUpload id={id} />}
-      <Card className={styles.Items_Block} sx={{ mixWidth: 245 }}>
-        <CardMedia
-          component="img"
-          sx={{ maxWidth: 180, backgroundColor: green[300] }}
-          image={carPhoto}
-          alt="Car Photo"
-        />
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <CardContent sx={{ flex: '1 0 auto' }}>
-            <Typography component="div" variant="subtitle1">
-              Машина -
-              {' '}
-              {' '}
-              {item.brand}
-              {' '}
-              {item.model}
-              {'   '}
-              <IconButton
-                aria-controls={open ? 'demo-positioned-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-                aria-label="share"
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-              >
-                <Link href={`/${item.id}`}>
-                  <MenuItem onClick={() => changeViewedCar({ carId: item.id, userId: userData?._id })}>
-                    Подробнее
-                  </MenuItem>
-                </Link>
-                { (userData && userData?._id !== item.userId) && (
+    <Card className={styles.Items_Block} sx={{ mixWidth: 245 }}>
+      <CardMedia
+        component="img"
+        sx={{ maxWidth: 180, backgroundColor: green[300] }}
+        image={carPhoto}
+        alt="Car Photo"
+      />
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ flex: '1 0 auto' }}>
+          <Typography component="div" variant="subtitle1">
+            Машина -
+            {' '}
+            {' '}
+            {item.brand}
+            {' '}
+            {item.model}
+            {'   '}
+            <IconButton
+              aria-controls={open ? 'demo-positioned-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              aria-label="share"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <Link href={`/${item.id}`}>
+                <MenuItem onClick={() => changeViewedCar({ carId: item.id, userId: userData?._id })}>
+                  Подробнее
+                </MenuItem>
+              </Link>
+              { (userData && userData?._id !== item.userId) && (
                 <MenuItem onClick={() => openChatModal()}>
                   Написать
                   {' '}
                   <RateReviewIcon />
                 </MenuItem>
-                )}
-                {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN')) && !item?.carPhoto
-                && (
-                <MenuItem onClick={openModal}>
-                  Загрузить фоторафию
-                  {' '}
-                  <DownloadIcon />
-                </MenuItem>
-                )}
-              </Menu>
-            </Typography>
-            {((userData?._id !== item.userId)
+              )}
+            </Menu>
+          </Typography>
+          {((userData?._id !== item.userId)
             && (
             <Link href={`/profile/${item.userId}`}>
               <Typography className={styles.Items_Block__Author} variant="subtitle2" component="div">
@@ -164,16 +146,16 @@ const CarItem = ({ id }:CarItemsProps) => {
             </Link>
             )
             )}
-            <Typography variant="subtitle2" color="text.secondary" component="div">
-              Цена -
-              {item.price}
-              $
-            </Typography>
-            <Typography variant="subtitle2" color="text.secondary" component="div">
-              Год Выпуска -
-              {item.releaseYear}
-            </Typography>
-            {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN'))
+          <Typography variant="subtitle2" color="text.secondary" component="div">
+            Цена -
+            {item.price}
+            $
+          </Typography>
+          <Typography variant="subtitle2" color="text.secondary" component="div">
+            Год Выпуска -
+            {item.releaseYear}
+          </Typography>
+          {((userData && userData?._id === item.userId) || (userData?.role === 'ADMIN'))
           && (
           <Typography variant="subtitle2" color="text.secondary" component="div">
             <Button onClick={() => editCarInfo()} size="small" variant="text" startIcon={<EditIcon />}>
@@ -181,7 +163,7 @@ const CarItem = ({ id }:CarItemsProps) => {
             </Button>
           </Typography>
           )}
-            {userData
+          {userData
           && (
             <>
               <IconButton onClick={() => changeLiked({ carId: item.id, userId: userData?._id })} aria-label="share">
@@ -198,10 +180,10 @@ const CarItem = ({ id }:CarItemsProps) => {
               </IconButton>
             </>
           )}
-          </CardContent>
-        </Box>
-      </Card>
-    </>
+        </CardContent>
+      </Box>
+    </Card>
+
   );
 };
 

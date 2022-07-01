@@ -2,13 +2,12 @@
   display: flex;
   justify-content: right;
 }
-
 .Chat_Block{
   max-height:400px;
   background-color: rgb(247, 242, 242);
   margin:10px;
   border-radius:3px;
-  padding:20px 10px;
+  padding:20px 10px 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;

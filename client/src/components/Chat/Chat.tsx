@@ -8,7 +8,6 @@ import Alert from '@mui/material/Alert';
 import {
   $currentChatUsersData,
   $currentUsersChat,
-  getCurrentUsersMessages,
   sendMessage,
 } from 'src/models/chat/chat';
 import { $userData } from 'src/models/authorization/authorization';
@@ -27,7 +26,7 @@ const Chat = () => {
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView();
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [currentChat]);
 
   useEffect(() => {
@@ -39,8 +38,7 @@ const Chat = () => {
     socket.current.onmessage = (event) => {
       if (JSON.parse(event.data).event !== 'write') {
         const messageFromSocket = JSON.parse(event.data);
-        getCurrentUsersMessages({ senderId: messageFromSocket.senderId, recipientId: messageFromSocket.recipientId });
-        setCurrentChat([...currentUsersChat, {
+        setCurrentChat((prev) => [...prev, {
           senderId: messageFromSocket.senderId,
           messageText: messageFromSocket.messageText,
           _id: messageFromSocket.id,
