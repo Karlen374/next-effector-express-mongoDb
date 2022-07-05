@@ -128,15 +128,19 @@ const Chat = () => {
         onChange={(e) => changeInputMessage(e)}
         label="Сообщение"
       />
-      {message && (
-      <Button
-        variant="contained"
-        onClick={() => sendOurMessage()}
-        endIcon={<SendRoundedIcon />}
-      >
-        отправить
-      </Button>
-      )}
+      <div>
+
+        {message && (
+        <Button
+          variant="contained"
+          sx={{ marginTop: 1 }}
+          onClick={() => sendOurMessage()}
+          endIcon={<SendRoundedIcon />}
+        >
+          отправить
+        </Button>
+        )}
+      </div>
     </div>
   );
 };

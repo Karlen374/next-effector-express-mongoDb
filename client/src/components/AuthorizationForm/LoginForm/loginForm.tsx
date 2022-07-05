@@ -6,7 +6,6 @@ import {
   changeLoginFormViewedModal,
   changeRegistrationFormViewedModal,
 } from 'src/models/modal/modal';
-
 import { userLogin } from 'src/models/authorization/authorization';
 import styles from './LoginForm.module.scss';
 

@@ -127,7 +127,7 @@ const CarItem = ({ id }:CarItemsProps) => {
                   Подробнее
                 </MenuItem>
               </Link>
-              { (userData && userData?._id !== item.userId) && (
+              { (userData && userData?._id !== item.userId && userData?.role !== 'ADMIN') && (
                 <MenuItem onClick={() => openChatModal()}>
                   Написать
                   {' '}

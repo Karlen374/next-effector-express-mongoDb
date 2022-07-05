@@ -71,12 +71,16 @@ const userProfile = ({ user }:UserProfileProps) => {
           </div>
         </Grid>
       </Grid>
-      <h2>
-        Все Объявления
-        {' '}
-        {user.userName}
-      </h2>
-      {user._id !== userData._id && <CarList data={currentUserCars} />}
+      {user._id !== userData?._id && (
+      <>
+        <h2>
+          Все Объявления
+          {' '}
+          {user.userName}
+        </h2>
+        <CarList data={currentUserCars} />
+      </>
+      )}
     </div>
   );
 };

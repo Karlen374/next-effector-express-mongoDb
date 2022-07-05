@@ -21,6 +21,7 @@ import RegistrationForm from 'src/components/AuthorizationForm/RegistrationForm/
 import Chat from 'src/components/Chat/Chat';
 import Modal from 'src/components/shared/modal/modal';
 import {
+  $loginMessage,
   $registrationMessage,
   $userData,
   clearUserData,
@@ -32,6 +33,7 @@ import AlertWarning from '../shared/alertWarning/alertWarning';
 const AppHeader = () => {
   const alert = useStore($Alert);
   const registrationMessage = useStore($registrationMessage);
+  const loginMessage = useStore($loginMessage);
   const userData = useStore($userData);
   const loginModal = useStore($loginModal);
   const registrationModal = useStore($registrationModal);
@@ -96,6 +98,8 @@ const AppHeader = () => {
         </div>
       )}
       {registrationMessage && registrationAlert}
+      {loginMessage === 'error'
+      && <AlertWarning severity="error" variant="filled" text="Введите корректные Данные !!!" />}
       <Grid container columnSpacing={{ lg: 90, md: 50 }} rowSpacing={3}>
         <Grid item lg={6} md={6} sm={6} xs={12}>
           {contentAuth}

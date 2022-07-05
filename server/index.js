@@ -43,7 +43,7 @@ startApp()
 
 const wss = new ws.Server({
   port: 5001,
-}, () => console.log(`Server started on 5001`))
+}, () => console.log(`WS Server started on 5001`))
 
 
 wss.on('connection', function connection(ws) {
