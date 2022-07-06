@@ -3,4 +3,5 @@ export interface IMessage {
   senderId:string;
   messageText:string;
   _id:string;
+  emotion?:string;
 }

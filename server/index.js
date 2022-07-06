@@ -56,6 +56,9 @@ wss.on('connection', function connection(ws) {
           case 'write':
               broadcastMessage(message,ws)
               break;
+          case 'emotion':
+              broadcastMessage(message,ws)
+              break;
       }
   })
 })

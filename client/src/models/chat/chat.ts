@@ -15,12 +15,32 @@ interface IMessageProps {
   senderId: string;
   recipientId:string;
   messageText:string
+  _id:string;
 }
-export const sendMessage = createEffect(async ({ senderId, recipientId, messageText }:IMessageProps) => {
+export const sendMessage = createEffect(async ({
+  senderId,
+  recipientId,
+  messageText,
+  _id,
+}:IMessageProps) => {
   const res = await request(
     'http://localhost:5000/message/sendMessage',
     'POST',
-    JSON.stringify({ senderId, recipientId, messageText }),
+    JSON.stringify({
+      senderId, recipientId, messageText, _id,
+    }),
+  );
+  return res;
+});
+interface IMessageEmotionProps {
+  messageId: string;
+  emotion: string;
+}
+export const addEmotionInMessage = createEffect(async ({ messageId, emotion }:IMessageEmotionProps) => {
+  const res = await request(
+    'http://localhost:5000/message/addEmotion',
+    'POST',
+    JSON.stringify({ _id: messageId, emotion }),
   );
   return res;
 });
