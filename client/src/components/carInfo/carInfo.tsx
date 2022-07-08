@@ -10,9 +10,16 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Grid from '@mui/material/Grid';
 import DownloadIcon from '@mui/icons-material/Download';
+import CircularProgress from '@mui/material/CircularProgress';
 import { ICar } from 'src/types/ICar';
-import { changeLiked, deleteCarPhoto, $cars } from 'src/models/cars/cars';
+import {
+  changeLiked,
+  deleteCarPhoto,
+  $cars,
+  $carPhotoChangeLoader,
+} from 'src/models/cars/cars';
 import { carPhotoUploadModal } from 'src/models/modal/modal';
 import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
 import { useStore } from 'effector-react';
@@ -25,14 +32,14 @@ interface CarInfoProps {
 }
 const CarInfo = ({ car }:CarInfoProps) => {
   const [carInfo, setCarInfo] = useState<ICar>();
-  const [liked, setLiked] = useState<boolean>();
   const [currentCarPhoto, setCurrentCarPhoto] = useState<string>('');
   const cars = useStore($cars);
   const userData = useStore($userData);
+  const [liked, setLiked] = useState<boolean>(car.likedUsersId.includes(userData?._id));
+  const carPhotoChangeLoader = useStore($carPhotoChangeLoader);
 
   useEffect(() => {
     setCarInfo(car);
-    setLiked(car.likedUsersId.includes(userData?._id));
     if (car.userId === userData?._id) {
       setCurrentCarPhoto(JSON.parse(getLocalStorage()?.getItem('currentCarPhoto') || ''));
     } else setCurrentCarPhoto(car.carPhoto);
@@ -42,6 +49,13 @@ const CarInfo = ({ car }:CarInfoProps) => {
     changeLiked({ carId: carInfo?.id, userId: userData?._id });
     setLiked(!liked);
   };
+  if (carPhotoChangeLoader) {
+    return (
+      <Grid item md={4} sm={6} lg={4} xs={12}>
+        <CircularProgress />
+      </Grid>
+    );
+  }
   const likeButton = !liked
     ? <FavoriteBorderIcon /> : <FavoriteIcon sx={{ color: red[900] }} />;
   const carPhoto = currentCarPhoto

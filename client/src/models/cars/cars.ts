@@ -45,6 +45,10 @@ export const deleteCarPhoto = createEffect(async (carId: string) => {
   return res;
 });
 
+export const $carPhotoChangeLoader = createStore<boolean>(false)
+  .on(uploadCarPhoto.pending, (_, pending) => pending)
+  .on(deleteCarPhoto.pending, (_, pending) => pending);
+
 export const loadCars = createEvent<ICar[]>();
 
 export const $cars = createStore<ICar[]>([])

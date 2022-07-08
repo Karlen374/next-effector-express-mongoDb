@@ -36,11 +36,31 @@ interface IMessageEmotionProps {
   messageId: string;
   emotion: string;
 }
+interface IEditMessageProps {
+  messageId:string;
+  editMessageText:string;
+}
 export const addEmotionInMessage = createEffect(async ({ messageId, emotion }:IMessageEmotionProps) => {
   const res = await request(
     'http://localhost:5000/message/addEmotion',
     'POST',
     JSON.stringify({ _id: messageId, emotion }),
+  );
+  return res;
+});
+export const editSelectedMessage = createEffect(async ({ messageId, editMessageText }:IEditMessageProps) => {
+  const res = await request(
+    'http://localhost:5000/message/editMessage',
+    'POST',
+    JSON.stringify({ messageId, editMessageText }),
+  );
+  return res;
+});
+export const delSelectedMessage = createEffect(async ({ id }) => {
+  const res = await request(
+    'http://localhost:5000/message/delMessage',
+    'DELETE',
+    JSON.stringify({ id }),
   );
   return res;
 });

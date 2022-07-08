@@ -14,12 +14,16 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import DiamondIcon from '@mui/icons-material/Diamond';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {
   $currentChatUsersData,
   $currentUsersChat,
   addEmotionInMessage,
+  delSelectedMessage,
+  editSelectedMessage,
   sendMessage,
 } from 'src/models/chat/chat';
 import { $userData } from 'src/models/authorization/authorization';
@@ -36,13 +40,23 @@ const Chat = () => {
   const [write, setWrite] = useState(false);
   const scrollRef = useRef(null);
   const [message, setMessage] = useState<string>('');
+  const [anchorElEmotionsMenu, setAnchorElEmotionsMenu] = useState<null | HTMLElement>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentMessageId, setCurrentMessageId] = useState<string>('');
+  const [editMessageId, setEditMessageId] = useState<string>('');
+  const openEmotionsMenu = Boolean(anchorElEmotionsMenu);
   const open = Boolean(anchorEl);
 
+  const handleClickEmotions = (event: React.MouseEvent<HTMLElement>, id: string) => {
+    setAnchorElEmotionsMenu(event.currentTarget);
+    setCurrentMessageId(id);
+  };
+  const handleCloseEmotions = () => {
+    setAnchorElEmotionsMenu(null);
+  };
   const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
     setAnchorEl(event.currentTarget);
-    setCurrentMessageId(id);
+    setEditMessageId(id);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -83,6 +97,17 @@ const Chat = () => {
           return item;
         }));
       }
+      if (JSON.parse(event.data).event === 'edit') {
+        const messageFromSocket = JSON.parse(event.data);
+        setCurrentChat((prev) => prev.map((item) => {
+          if (item._id === messageFromSocket.id) item.messageText = messageFromSocket.message;
+          return item;
+        }));
+      }
+      if (JSON.parse(event.data).event === 'delete') {
+        const messageFromSocket = JSON.parse(event.data);
+        setCurrentChat((prev) => prev.filter((item) => item._id !== messageFromSocket.id));
+      }
     };
 
     socket.current.onclose = () => {
@@ -95,28 +120,44 @@ const Chat = () => {
   }, []);
 
   const sendOurMessage = () => {
-    const messageId = uuid();
-    sendMessage({
-      senderId: currentChatUsersData.senderId,
-      messageText: message,
-      recipientId: currentChatUsersData.recipientId,
-      _id: messageId,
-    });
-    setCurrentChat([...currentChat, {
-      senderId: currentChatUsersData.senderId,
-      messageText: message,
-      _id: messageId,
-    }]);
-    const socketMessage = {
-      senderId: currentChatUsersData.senderId,
-      messageText: message,
-      recipientId: currentChatUsersData.recipientId,
-      id: messageId,
-      event: 'message',
-    };
+    if (!editMessageId) {
+      const messageId = uuid();
+      sendMessage({
+        senderId: currentChatUsersData.senderId,
+        messageText: message,
+        recipientId: currentChatUsersData.recipientId,
+        _id: messageId,
+      });
+      setCurrentChat([...currentChat, {
+        senderId: currentChatUsersData.senderId,
+        messageText: message,
+        _id: messageId,
+      }]);
+      const socketMessage = {
+        senderId: currentChatUsersData.senderId,
+        messageText: message,
+        recipientId: currentChatUsersData.recipientId,
+        id: messageId,
+        event: 'message',
+      };
 
-    socket.current.send(JSON.stringify(socketMessage));
-    setMessage('');
+      socket.current.send(JSON.stringify(socketMessage));
+      setMessage('');
+    } else {
+      editSelectedMessage({ messageId: editMessageId, editMessageText: message });
+      setCurrentChat(currentChat.map((item) => {
+        if (item._id === editMessageId) item.messageText = message;
+        return item;
+      }));
+      const socketMessage = {
+        message,
+        id: editMessageId,
+        event: 'edit',
+      };
+      socket.current.send(JSON.stringify(socketMessage));
+      setEditMessageId('');
+      setMessage('');
+    }
   };
 
   const changeInputMessage = (e) => {
@@ -140,6 +181,18 @@ const Chat = () => {
       return item;
     }));
     socket.current.send(JSON.stringify(socketMessage));
+    handleCloseEmotions();
+  };
+  const editMessage = () => {
+    const editMessageText = currentChat.filter((item) => item._id === editMessageId)[0].messageText;
+    setMessage(editMessageText);
+    handleClose();
+  };
+  const deleteMessage = () => {
+    delSelectedMessage({ id: editMessageId });
+    socket.current.send(JSON.stringify({ id: editMessageId, event: 'delete' }));
+    setCurrentChat(currentChat.filter((item) => item._id !== editMessageId));
+    setEditMessageId('');
     handleClose();
   };
 
@@ -179,12 +232,46 @@ const Chat = () => {
                     label={item.messageText}
                     color="primary"
                     icon={emotion}
+                    onClick={(e) => handleClick(e, item._id)}
                   />
                 )
-                : <Chip onClick={(e) => handleClick(e, item._id)} label={item.messageText} icon={emotion} />}
+                : <Chip onClick={(e) => handleClickEmotions(e, item._id)} label={item.messageText} icon={emotion} />}
             </div>
           );
         })}
+        <Menu
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={anchorElEmotionsMenu}
+          open={openEmotionsMenu}
+          onClose={handleCloseEmotions}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <div className={styles.Chat_Block_Menu__Emotions}>
+            <MenuItem onClick={() => addMessageEmotion('cup')}>
+              <EmojiEventsIcon sx={{ color: yellow[700] }} />
+            </MenuItem>
+            <MenuItem onClick={() => addMessageEmotion('clock')}>
+              <AccessAlarmIcon sx={{ color: purple[500] }} />
+            </MenuItem>
+            <MenuItem onClick={() => addMessageEmotion('diamond')}>
+              <DiamondIcon sx={{ color: blue[500] }} />
+            </MenuItem>
+            <MenuItem onClick={() => addMessageEmotion('like')}>
+              <InsertEmoticonIcon sx={{ color: green[800] }} />
+            </MenuItem>
+            <MenuItem onClick={() => addMessageEmotion('disLike')}>
+              <SentimentDissatisfiedIcon sx={{ color: red[500] }} />
+            </MenuItem>
+          </div>
+        </Menu>
         <Menu
           id="demo-positioned-menu"
           aria-labelledby="demo-positioned-button"
@@ -193,27 +280,20 @@ const Chat = () => {
           onClose={handleClose}
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'right',
+            horizontal: 'left',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'right',
+            horizontal: 'left',
           }}
         >
-          <MenuItem onClick={() => addMessageEmotion('cup')}>
-            <EmojiEventsIcon sx={{ color: yellow[700] }} />
+          <MenuItem sx={{ color: green[700] }} onClick={() => editMessage()}>
+            редактировать
+            <EditIcon />
           </MenuItem>
-          <MenuItem onClick={() => addMessageEmotion('clock')}>
-            <AccessAlarmIcon sx={{ color: purple[500] }} />
-          </MenuItem>
-          <MenuItem onClick={() => addMessageEmotion('diamond')}>
-            <DiamondIcon sx={{ color: blue[500] }} />
-          </MenuItem>
-          <MenuItem onClick={() => addMessageEmotion('like')}>
-            <InsertEmoticonIcon sx={{ color: green[800] }} />
-          </MenuItem>
-          <MenuItem onClick={() => addMessageEmotion('disLike')}>
-            <SentimentDissatisfiedIcon sx={{ color: red[500] }} />
+          <MenuItem sx={{ color: red[500] }} onClick={() => deleteMessage()}>
+            удалить
+            <DeleteIcon />
           </MenuItem>
         </Menu>
         { write && <Chip label={`${currentChatUsersData.recipientName} Печатает...`} />}

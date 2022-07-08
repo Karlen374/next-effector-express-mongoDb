@@ -20,6 +20,11 @@
       width: 10px;
     }
   }
+  &_Menu{
+    &__Emotions{
+      display: flex;
+    }
+  }
   &_Messages{
     & div {
       background: rgb(63,94,251);
@@ -38,3 +43,4 @@
     
   }
 }
+

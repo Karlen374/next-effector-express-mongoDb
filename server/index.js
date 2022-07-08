@@ -59,6 +59,12 @@ wss.on('connection', function connection(ws) {
           case 'emotion':
               broadcastMessage(message,ws)
               break;
+          case 'delete':
+              broadcastMessage(message,ws)
+              break;
+          case 'edit':
+              broadcastMessage(message,ws)
+              break;
       }
   })
 })
