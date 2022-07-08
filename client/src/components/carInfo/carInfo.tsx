@@ -35,7 +35,7 @@ const CarInfo = ({ car }:CarInfoProps) => {
   const [currentCarPhoto, setCurrentCarPhoto] = useState<string>('');
   const cars = useStore($cars);
   const userData = useStore($userData);
-  const [liked, setLiked] = useState<boolean>(car.likedUsersId.includes(userData?._id));
+  const [liked, setLiked] = useState<boolean>(car?.likedUsersId.includes(userData?._id));
   const carPhotoChangeLoader = useStore($carPhotoChangeLoader);
 
   useEffect(() => {

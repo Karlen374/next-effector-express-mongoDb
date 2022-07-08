@@ -3,10 +3,15 @@ import { useEffect } from 'react';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Grid, IconButton, Input } from '@mui/material';
 import { $currentUserCars, loadCurrentUserCars } from 'src/models/currentUserCars/currentUserCars';
 import { IUser } from 'src/types/IUser';
-import { $userData, deleteUserAvatar, uploadUserAvatar } from 'src/models/authorization/authorization';
+import {
+  $userData,
+  deleteUserAvatar,
+  uploadUserAvatar, $userAvatarPhotoLoader,
+} from 'src/models/authorization/authorization';
 import CarList from 'src/components/carList/carList';
 import styles from './userProfile.module.scss';
 
@@ -16,6 +21,7 @@ interface UserProfileProps {
 const userProfile = ({ user }:UserProfileProps) => {
   const currentUserCars = useStore($currentUserCars);
   const userData = useStore($userData);
+  const userAvatarPhotoLoader = useStore($userAvatarPhotoLoader);
   useEffect(() => {
     loadCurrentUserCars(user._id);
   }, []);
@@ -27,6 +33,13 @@ const userProfile = ({ user }:UserProfileProps) => {
   const delUserAvatar = () => {
     deleteUserAvatar();
   };
+  if (userAvatarPhotoLoader) {
+    return (
+      <Grid item md={4} sm={6} lg={4} xs={12}>
+        <CircularProgress />
+      </Grid>
+    );
+  }
   const userAvatar = (user?.avatar && user?._id !== userData?._id)
     ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" />
     : null;

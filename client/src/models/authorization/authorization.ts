@@ -71,6 +71,10 @@ export const deleteUserAvatar = createEffect(async () => {
   return res;
 });
 
+export const $userAvatarPhotoLoader = createStore<boolean>(false)
+  .on(uploadUserAvatar.pending, (_, pending) => pending)
+  .on(deleteUserAvatar.pending, (_, pending) => pending);
+
 export const loadUserData = createEvent<void>();
 export const clearUserData = createEvent<void>();
 
