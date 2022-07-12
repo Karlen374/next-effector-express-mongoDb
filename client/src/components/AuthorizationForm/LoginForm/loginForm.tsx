@@ -16,6 +16,7 @@ const LoginForm = () => {
     handleSubmit,
     reset,
   } = useForm({ mode: 'onBlur' });
+
   const openRegistrationForm = () => {
     changeLoginFormViewedModal(false);
     reset();

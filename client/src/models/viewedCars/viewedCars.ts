@@ -1,7 +1,7 @@
 import { combine } from 'effector';
 import { $searchParams } from 'src/models/searchParams/searchParams';
 import { $cars } from 'src/models/cars/cars';
-import { getLocalStorage } from 'src/hooks/hooks';
+import { getLocalStorage } from 'src/hooks/getLocalStorage';
 
 export const $viewedCars = combine($cars, $searchParams, (cars, searchParams) => {
   let filteredCars = cars;

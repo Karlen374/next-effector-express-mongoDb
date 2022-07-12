@@ -39,7 +39,7 @@ const Index = ({ data }:IndexPage) => {
       </Head>
       <MainLayout>
         <CarListHeader />
-        <CarList data={viewedCars} />
+        <CarList cars={viewedCars} />
       </MainLayout>
     </>
   );

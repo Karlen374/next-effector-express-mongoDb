@@ -1,5 +1,5 @@
 import { createStore, createEffect } from 'effector';
-import { getLocalStorage } from 'src/hooks/hooks';
+import { getLocalStorage } from 'src/hooks/getLocalStorage';
 import { request } from 'src/hooks/useHttp';
 import { AdminPanelProps } from 'pages/adminPanel';
 

@@ -1,5 +1,5 @@
 import { createStore, createEffect, createEvent } from 'effector';
-import { getLocalStorage } from 'src/hooks/hooks';
+import { getLocalStorage } from 'src/hooks/getLocalStorage';
 import { ILoginForm } from 'src/types/ILoginForm';
 import { IRegistrationForm } from 'src/types/IRegistrationForm';
 import { IUser } from 'src/types/IUser';
@@ -34,23 +34,16 @@ export const userLogin = createEffect(async (data:ILoginForm) => {
   return res;
 });
 
-export const checkLoginMessage = createEvent<string>('');
-
-userLogin.doneData.watch(() => {
-  checkLoginMessage('success');
-  setTimeout(() => {
-    checkLoginMessage('');
-  }, 2000);
-});
+export const checkLoginMessage = createEvent<boolean>();
 
 userLogin.failData.watch(() => {
-  checkLoginMessage('error');
+  checkLoginMessage(true);
   setTimeout(() => {
-    checkLoginMessage('');
+    checkLoginMessage(false);
   }, 2000);
 });
 
-export const $loginMessage = createStore<string>('')
+export const $loginMessage = createStore<boolean>(false)
   .on(checkLoginMessage, (_, message) => message);
 
 export const uploadUserAvatar = createEffect(async (file) => {
@@ -75,10 +68,10 @@ export const $userAvatarPhotoLoader = createStore<boolean>(false)
   .on(uploadUserAvatar.pending, (_, pending) => pending)
   .on(deleteUserAvatar.pending, (_, pending) => pending);
 
-export const loadUserData = createEvent<void>();
-export const clearUserData = createEvent<void>();
+export const loadRegisteredUserData = createEvent<void>();
+export const clearRegisteredUserData = createEvent<void>();
 
-export const $userData = createStore<IUser>(null)
+export const $registeredUserData = createStore<IUser>(null)
   .on(userLogin.doneData, (_, user) => {
     getLocalStorage()?.setItem('data', JSON.stringify(user));
     return user;
@@ -95,9 +88,9 @@ export const $userData = createStore<IUser>(null)
     getLocalStorage()?.setItem('data', JSON.stringify(newData));
     return user;
   })
-  .on(loadUserData, () => JSON.parse(getLocalStorage()?.getItem('data')))
+  .on(loadRegisteredUserData, () => JSON.parse(getLocalStorage()?.getItem('data')))
 
-  .on(clearUserData, () => {
+  .on(clearRegisteredUserData, () => {
     getLocalStorage()?.removeItem('data');
     return null;
   });

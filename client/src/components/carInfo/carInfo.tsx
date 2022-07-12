@@ -19,12 +19,13 @@ import {
   deleteCarPhoto,
   $cars,
   $carPhotoChangeLoader,
+  changeViewedCar,
 } from 'src/models/cars/cars';
 import { carPhotoUploadModal } from 'src/models/modal/modal';
 import CarPhotoUpload from 'src/components/shared/carPhotoUpload/carPhotoUpload';
 import { useStore } from 'effector-react';
-import { $userData } from 'src/models/authorization/authorization';
-import { getLocalStorage } from 'src/hooks/hooks';
+import { $registeredUserData } from 'src/models/authorization/authorization';
+import { getLocalStorage } from 'src/hooks/getLocalStorage';
 import styles from './carInfo.module.scss';
 
 interface CarInfoProps {
@@ -34,34 +35,30 @@ const CarInfo = ({ car }:CarInfoProps) => {
   const [carInfo, setCarInfo] = useState<ICar>();
   const [currentCarPhoto, setCurrentCarPhoto] = useState<string>('');
   const cars = useStore($cars);
-  const userData = useStore($userData);
-  const [liked, setLiked] = useState<boolean>(car?.likedUsersId.includes(userData?._id));
+  const registeredUserData = useStore($registeredUserData);
+  const [liked, setLiked] = useState<boolean>(car?.likedUsersId.includes(registeredUserData?._id));
   const carPhotoChangeLoader = useStore($carPhotoChangeLoader);
 
   useEffect(() => {
     setCarInfo(car);
-    if (car.userId === userData?._id) {
-      setCurrentCarPhoto(JSON.parse(getLocalStorage()?.getItem('currentCarPhoto') || ''));
+    changeViewedCar({ carId: car.id, userId: registeredUserData?._id });
+    if (car.userId === registeredUserData?._id) {
+      setCurrentCarPhoto(JSON.parse(getLocalStorage()?.getItem('currentCarPhoto')) || '');
     } else setCurrentCarPhoto(car.carPhoto);
   }, [cars]);
 
   const changeCarLike = () => {
-    changeLiked({ carId: carInfo?.id, userId: userData?._id });
+    changeLiked({ carId: carInfo?.id, userId: registeredUserData?._id });
     setLiked(!liked);
   };
-  if (carPhotoChangeLoader) {
-    return (
-      <Grid item md={4} sm={6} lg={4} xs={12}>
-        <CircularProgress />
-      </Grid>
-    );
-  }
+
   const likeButton = !liked
     ? <FavoriteBorderIcon /> : <FavoriteIcon sx={{ color: red[900] }} />;
+
   const carPhoto = currentCarPhoto
     ? `http://localhost:5000/cars/${currentCarPhoto}` : 'http://localhost:5000/noPhoto.jpg';
 
-  const carPhotoChange = currentCarPhoto
+  const carPhotoChangeIcon = currentCarPhoto
     ? (
       <IconButton onClick={() => deleteCarPhoto(car.id)}>
         <DeleteIcon />
@@ -72,7 +69,16 @@ const CarInfo = ({ car }:CarInfoProps) => {
         <DownloadIcon />
       </IconButton>
     );
-  const viewCarPhotoChange = userData?._id === car?.userId ? carPhotoChange : null;
+  const viewCarPhotoChange = registeredUserData?._id === car?.userId ? carPhotoChangeIcon : null;
+
+  if (carPhotoChangeLoader) {
+    return (
+      <Grid item md={4} sm={6} lg={4} xs={12}>
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
   return (
     <>
       <CarPhotoUpload id={car?.id} />
@@ -94,7 +100,7 @@ const CarInfo = ({ car }:CarInfoProps) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          {userData
+          {registeredUserData
           && (
           <IconButton onClick={changeCarLike} aria-label="add to favorites">
             {likeButton}

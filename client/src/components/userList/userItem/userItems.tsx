@@ -12,7 +12,6 @@ const UserItems = ({ data }: AdminPanelPage) => {
 
     return (
       <Grid key={item._id} item md={4} sm={6} lg={4} xs={12}>
-
         <div className={itemStyle}>
           <div>
             Имя -
@@ -26,15 +25,15 @@ const UserItems = ({ data }: AdminPanelPage) => {
             id -
             {item._id}
           </div>
-          {/* <div>
+          <div>
             Роль -
-            {item.roles}
-          </div> */}
-
+            {item.roles[0]}
+          </div>
         </div>
       </Grid>
     );
   });
+
   return (
     <div className="css-zow5z4-MuiGrid-root">
       {content}

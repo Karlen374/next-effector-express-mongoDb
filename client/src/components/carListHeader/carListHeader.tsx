@@ -18,14 +18,14 @@ import {
   changeFilterValue,
   changeVisibleArrayInterval,
 } from 'src/models/searchParams/searchParams';
-import { $userData } from 'src/models/authorization/authorization';
+import { $registeredUserData } from 'src/models/authorization/authorization';
 import styles from './carListHeader.module.scss';
 
 const CarListHeader = () => {
   const [value, setValue] = useState<number[]>([0, 10000]);
   const minDistance = 1500;
   const searchParams = useStore($searchParams);
-  const userData = useStore($userData);
+  const registeredUserData = useStore($registeredUserData);
 
   const handleChange = (e: SelectChangeEvent) => {
     changeFilterValue(e.target.value);
@@ -73,7 +73,6 @@ const CarListHeader = () => {
   );
 
   return (
-
     <div className={styles.Car_List__Header}>
       <Grid container spacing={4}>
         <Grid item sm={6} lg={3} xs={12}>
@@ -85,7 +84,7 @@ const CarListHeader = () => {
             variant="outlined"
           />
         </Grid>
-        {userData
+        {registeredUserData
         && (
         <Grid item sm={6} lg={3} xs={12}>
           {showButton}
