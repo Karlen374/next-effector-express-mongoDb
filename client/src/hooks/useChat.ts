@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import {
   $currentChatUsersData,
   addEmotionInMessage,
@@ -53,15 +53,15 @@ export const useChat = () => {
         deleteLocalMessage(messageFromSocket.id);
       }
     };
-    socket.current.onclose = () => {
-      changeSocketServerErrorStatus(true);
-    };
 
     socket.current.onerror = () => {
       changeSocketServerErrorStatus(true);
     };
   };
-  const addMessageEmotion = (emotion:string, currentMessageId:string) => {
+  const closeWebSocketServer = () => {
+    socket.current?.close();
+  };
+  const addMessageEmotion = useCallback((emotion:string, currentMessageId:string) => {
     addEmotionInMessage({ messageId: currentMessageId, emotion });
     const socketMessage = {
       emotion,
@@ -70,7 +70,7 @@ export const useChat = () => {
     };
     addLocalMessageEmotion({ emotionMessageId: currentMessageId, emotion });
     socket.current?.send(JSON.stringify(socketMessage));
-  };
+  }, []);
 
   const addNewMessage = (message:string) => {
     const messageId = uuid();
@@ -119,6 +119,12 @@ export const useChat = () => {
     deleteLocalMessage(id);
   };
   return {
-    startWebSocketServer, addMessageEmotion, addNewMessage, editMessage, sendWriteMessage, deleteMessage,
+    startWebSocketServer,
+    closeWebSocketServer,
+    addMessageEmotion,
+    addNewMessage,
+    editMessage,
+    sendWriteMessage,
+    deleteMessage,
   };
 };

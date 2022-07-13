@@ -11,6 +11,7 @@ interface IChatItemProps {
   item:IMessage;
   scrollRef:any;
 }
+
 export const ChatItem = ({
   handleClickEdit, handleClickEmotions, scrollRef, item,
 }:IChatItemProps) => {

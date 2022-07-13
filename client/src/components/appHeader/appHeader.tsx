@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Link from 'next/link';
 import { grey } from '@mui/material/colors';
 import { useStore } from 'effector-react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { changeAddFormViewedModal } from 'src/models/modal/modal';
 import { setSelectEditCar } from 'src/models/editCar/editCar';
 import { $apiErrorAlert } from 'src/models/apiErrorAlert/apiErrorAlert';
@@ -71,4 +71,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export default React.memo(AppHeader);

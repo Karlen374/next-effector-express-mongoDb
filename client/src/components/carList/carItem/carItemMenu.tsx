@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,7 +18,6 @@ const CarItemMenu = ({ car }:CarItemMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const registeredUserData = useStore($registeredUserData);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -77,4 +76,4 @@ const CarItemMenu = ({ car }:CarItemMenuProps) => {
     </>
   );
 };
-export default CarItemMenu;
+export default React.memo(CarItemMenu);

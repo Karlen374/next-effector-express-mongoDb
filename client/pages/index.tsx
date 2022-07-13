@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { useStore } from 'effector-react';
 import CarListHeader from 'src/components/carListHeader/carListHeader';
@@ -23,13 +23,10 @@ interface IndexPage {
 }
 const Index = ({ data }:IndexPage) => {
   const viewedCars = useStore($viewedCars);
-  const [shouldRender, setShouldRender] = useState(false);
+
   useEffect(() => {
-    setShouldRender(true);
     loadCars(data);
   }, []);
-
-  if (!shouldRender) return null;
 
   return (
     <>

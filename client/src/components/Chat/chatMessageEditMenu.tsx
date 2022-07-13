@@ -5,17 +5,20 @@ import MenuItem from '@mui/material/MenuItem';
 import { green, red } from '@mui/material/colors';
 import { $anchorElEditMenu, resetAnchorElEditMenu } from 'src/models/chat/chat';
 import { useStore } from 'effector-react';
+import React from 'react';
 
 interface IChatMessageEditMenuProps {
   getEditMessage:()=>void;
   deleteOurMessage:()=>void;
 }
+
 const ChatMessageEditMenu = ({ getEditMessage, deleteOurMessage }:IChatMessageEditMenuProps) => {
   const anchorElEditMenu = useStore($anchorElEditMenu);
   const open = Boolean(anchorElEditMenu);
   const handleClose = () => {
     resetAnchorElEditMenu();
   };
+
   return (
     <Menu
       id="demo-positioned-menu"
@@ -43,4 +46,4 @@ const ChatMessageEditMenu = ({ getEditMessage, deleteOurMessage }:IChatMessageEd
     </Menu>
   );
 };
-export default ChatMessageEditMenu;
+export default React.memo(ChatMessageEditMenu);

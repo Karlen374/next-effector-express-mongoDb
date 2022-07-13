@@ -1,5 +1,10 @@
 import { useStore } from 'effector-react';
-import { useEffect, useState, useRef } from 'react';
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
@@ -33,6 +38,7 @@ const Chat = () => {
     startWebSocketServer,
     addNewMessage,
     editMessage,
+    closeWebSocketServer,
     sendWriteMessage,
     addMessageEmotion,
     deleteMessage,
@@ -44,6 +50,7 @@ const Chat = () => {
 
   useEffect(() => {
     startWebSocketServer();
+    return () => closeWebSocketServer();
   }, []);
 
   const handleClickEmotions = (event: React.MouseEvent<HTMLElement>, id: string) => {
@@ -71,16 +78,17 @@ const Chat = () => {
     setMessage(e.target.value);
     sendWriteMessage();
   };
-  const getEditMessage = () => {
-    const editMessageText = currentUsersChat.filter((item) => item._id === editMessageId)[0].messageText;
+  const getEditMessage = useCallback(() => {
+    const editMessageText = currentUsersChat?.filter((item) => item._id === editMessageId)[0]?.messageText;
     setMessage(editMessageText);
     resetAnchorElEditMenu();
-  };
-  const deleteOurMessage = () => {
+  }, [currentUsersChat, editMessageId]);
+
+  const deleteOurMessage = useCallback(() => {
     deleteMessage(editMessageId);
     setEditMessageId('');
     resetAnchorElEditMenu();
-  };
+  }, [editMessageId]);
 
   return (
     <div className={styles.Chat}>

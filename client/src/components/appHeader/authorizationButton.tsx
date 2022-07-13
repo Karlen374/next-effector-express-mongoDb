@@ -12,7 +12,6 @@ import styles from './appHeader.module.scss';
 
 const AuthorizationButton = () => {
   const registeredUserData = useStore($registeredUserData);
-
   const content = registeredUserData
     ? (
       <>

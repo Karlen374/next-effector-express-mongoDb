@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { useAdvertisement } from 'src/hooks/useAdvertisment';
+import React from 'react';
 import { changeAddFormViewedModal, changeConfirmModal } from 'src/models/modal/modal';
 import styles from './createAdvertisement.module.scss';
 
@@ -19,6 +20,7 @@ const AdvertisementButtons = ({
       changeConfirmModal(true);
     } else changeAddFormViewedModal(false);
   };
+
   const saveDataCar = () => {
     saveDataFromAdvertisementForm(brand, model, price, releaseYear, description);
     changeAddFormViewedModal(false);
@@ -36,4 +38,8 @@ const AdvertisementButtons = ({
   );
 };
 
-export default AdvertisementButtons;
+export default React.memo(AdvertisementButtons, (prev, next) => {
+  if (next.releaseYear && next.price && Number(next.price) < 10000 && next.model && next.brand && next.description) {
+    return false;
+  } else return true;
+});

@@ -14,6 +14,7 @@ const UserProfileAvatar = ({ user }:IUserProfileAvatarProps) => {
     const file = e.target.files[0];
     uploadUserAvatar(file);
   };
+
   const userAvatar = (user?.avatar && user?._id !== registeredUserData?._id)
     ? <img alt={user.userName} src={`http://localhost:5000/${user.avatar}`} height="150" />
     : null;

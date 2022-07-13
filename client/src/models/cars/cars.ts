@@ -68,7 +68,6 @@ export const $cars = createStore<ICar[]>([])
   .on(addCar.doneData, (cars, newCar) => {
     return [...cars, newCar];
   })
-
   .on(changeLiked.doneData, (cars, likeCar) => {
     const data = cars.map((item) => {
       if (item.id === likeCar.id) {

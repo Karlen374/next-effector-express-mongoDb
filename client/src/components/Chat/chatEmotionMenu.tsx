@@ -1,4 +1,5 @@
 import { useStore } from 'effector-react';
+import React from 'react';
 import { $anchorElEmotionsMenu, resetAnchorElEmotionsMenu } from 'src/models/chat/chat';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
@@ -22,6 +23,7 @@ const ChatEmotionMenu = ({ currentMessageId, addMessageEmotion }:IChatEmotionMen
   const handleCloseEmotions = () => {
     resetAnchorElEmotionsMenu();
   };
+
   const addEmotionInCurrentMessage = (emotion) => {
     addMessageEmotion(emotion, currentMessageId);
     resetAnchorElEmotionsMenu();
@@ -62,4 +64,4 @@ const ChatEmotionMenu = ({ currentMessageId, addMessageEmotion }:IChatEmotionMen
     </Menu>
   );
 };
-export default ChatEmotionMenu;
+export default React.memo(ChatEmotionMenu);

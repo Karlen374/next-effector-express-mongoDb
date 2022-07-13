@@ -11,8 +11,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { red, green } from '@mui/material/colors';
 import { useStore } from 'effector-react';
-import { useEffect, useState } from 'react';
-import { changeLiked, $cars } from 'src/models/cars/cars';
+import React, { useEffect, useState } from 'react';
+import { changeLiked } from 'src/models/cars/cars';
 import { ICar } from 'src/types/ICar';
 import { $registeredUserData } from 'src/models/authorization/authorization';
 import styles from './carItem.module.scss';
@@ -21,9 +21,10 @@ import CarItemMenu from './carItemMenu';
 
 export interface CarItemProps {
   id:string;
+  likedUsersId: string[];
+  viewedUsersId: string[];
 }
-const CarItem = ({ id }:CarItemProps) => {
-  const cars = useStore($cars);
+const CarItem = ({ id, likedUsersId, viewedUsersId }:CarItemProps) => {
   const registeredUserData = useStore($registeredUserData);
   const [item, setItem] = useState<ICar>(null);
 
@@ -34,7 +35,7 @@ const CarItem = ({ id }:CarItemProps) => {
   };
   useEffect(() => {
     loadData();
-  }, [cars]);
+  }, [likedUsersId, viewedUsersId]);
 
   const changeCarLike = () => {
     changeLiked({ carId: item.id, userId: registeredUserData?._id });
@@ -100,4 +101,4 @@ const CarItem = ({ id }:CarItemProps) => {
   );
 };
 
-export default CarItem;
+export default React.memo(CarItem);

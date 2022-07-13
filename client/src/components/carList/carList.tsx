@@ -16,6 +16,7 @@ const CarList = ({ cars }:CarListProps) => {
     delay: 0,
     key: (item) => item.id,
   });
+
   return (
     <div className={styles.Car_List}>
       <Grid container spacing={3}>
@@ -29,7 +30,12 @@ const CarList = ({ cars }:CarListProps) => {
                     .to(() => 'opacity 100ms ease-in'),
                 }}
               >
-                <CarItem key={item.id} id={item.id} />
+                <CarItem
+                  key={item.id}
+                  id={item.id}
+                  likedUsersId={item.likedUsersId}
+                  viewedUsersId={item.viewedUsersId}
+                />
               </animated.div>
             </Grid>
           ))}

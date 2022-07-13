@@ -11,7 +11,7 @@ export const useAdvertisement = () => {
   const selectedCar = useStore($selectedCar);
   const registeredUserData = useStore($registeredUserData);
 
-  const saveDataFromAdvertisementForm = (brand, model, price, releaseYear, description) => {
+  const saveDataFromAdvertisementForm = async (brand, model, price, releaseYear, description) => {
     let updatePrice = '';
     for (let i = 0; i < price.length; i++) {
       if (price[i] !== ' ') updatePrice += price.slice(i, i + 1);

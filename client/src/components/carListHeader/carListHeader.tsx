@@ -127,4 +127,4 @@ const CarListHeader = () => {
 
   );
 };
-export default CarListHeader;
+export default React.memo(CarListHeader);
