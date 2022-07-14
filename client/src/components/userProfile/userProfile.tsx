@@ -1,13 +1,14 @@
 import { useStore } from 'effector-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Grid } from '@mui/material';
-import { $currentUserCars, loadCurrentUserCars } from 'src/models/currentUserCars/currentUserCars';
 import { IUser } from 'src/types/IUser';
 import { $registeredUserData, deleteUserAvatar, $userAvatarPhotoLoader } from 'src/models/authorization/authorization';
 import CarList from 'src/components/carList/carList';
+import { $cars } from 'src/models/cars/cars';
+import { ICar } from 'src/types/ICar';
 import styles from './userProfile.module.scss';
 import UserProfileAvatar from './userProfileAvatar';
 
@@ -15,13 +16,13 @@ interface UserProfileProps {
   user: IUser;
 }
 const userProfile = ({ user }:UserProfileProps) => {
-  const currentUserCars = useStore($currentUserCars);
+  const cars = useStore($cars);
+  const [currentUserCars, setCurrentUserCars] = useState<ICar[]>();
   const registeredUserData = useStore($registeredUserData);
   const userAvatarPhotoLoader = useStore($userAvatarPhotoLoader);
-
   useEffect(() => {
-    loadCurrentUserCars(user._id);
-  }, []);
+    setCurrentUserCars(cars?.filter((item) => item.userId === user._id));
+  }, [cars]);
 
   const delUserAvatar = () => {
     deleteUserAvatar();
@@ -55,16 +56,12 @@ const userProfile = ({ user }:UserProfileProps) => {
           </div>
         </Grid>
       </Grid>
-      {user._id !== registeredUserData?._id && (
-      <>
-        <h2>
-          Все Объявления
-          {' '}
-          {user.userName}
-        </h2>
-        <CarList cars={currentUserCars} />
-      </>
-      )}
+      <h2>
+        Все Объявления
+        {' '}
+        {user.userName}
+      </h2>
+      <CarList cars={currentUserCars} />
     </div>
   );
 };

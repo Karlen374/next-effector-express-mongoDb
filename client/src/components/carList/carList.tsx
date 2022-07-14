@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid';
 import { useTransition, animated } from 'react-spring';
 import { ICar } from 'src/types/ICar';
+import React from 'react';
 import CarItem from './carItem/carItem';
 import styles from './carList.module.scss';
 
@@ -44,4 +45,4 @@ const CarList = ({ cars }:CarListProps) => {
     </div>
   );
 };
-export default CarList;
+export default React.memo(CarList);

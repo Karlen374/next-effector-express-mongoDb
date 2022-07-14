@@ -1,6 +1,7 @@
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { Grid, IconButton, Input } from '@mui/material';
 import { useStore } from 'effector-react';
+import React from 'react';
 import { $registeredUserData, uploadUserAvatar } from 'src/models/authorization/authorization';
 import { IUser } from 'src/types/IUser';
 import styles from './userProfile.module.scss';
@@ -10,6 +11,7 @@ interface IUserProfileAvatarProps {
 }
 const UserProfileAvatar = ({ user }:IUserProfileAvatarProps) => {
   const registeredUserData = useStore($registeredUserData);
+
   const addAvatar = (e) => {
     const file = e.target.files[0];
     uploadUserAvatar(file);
@@ -42,4 +44,4 @@ const UserProfileAvatar = ({ user }:IUserProfileAvatarProps) => {
 
   );
 };
-export default UserProfileAvatar;
+export default React.memo(UserProfileAvatar);

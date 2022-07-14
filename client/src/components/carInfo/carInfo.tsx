@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { red } from '@mui/material/colors';
@@ -36,16 +36,23 @@ const CarInfo = ({ car }:CarInfoProps) => {
   const [currentCarPhoto, setCurrentCarPhoto] = useState<string>('');
   const cars = useStore($cars);
   const registeredUserData = useStore($registeredUserData);
-  const [liked, setLiked] = useState<boolean>(car?.likedUsersId?.includes(registeredUserData?._id));
+  const [liked, setLiked] = useState<boolean>(false);
   const carPhotoChangeLoader = useStore($carPhotoChangeLoader);
 
   useEffect(() => {
     setCarInfo(car);
-    changeViewedCar({ carId: car.id, userId: registeredUserData?._id });
     if (car.userId === registeredUserData?._id) {
       setCurrentCarPhoto(JSON.parse(getLocalStorage()?.getItem('currentCarPhoto')) || '');
     } else setCurrentCarPhoto(car.carPhoto);
   }, [cars]);
+
+  useEffect(() => {
+    changeViewedCar({ carId: car.id, userId: registeredUserData?._id });
+  }, []);
+
+  useEffect(() => {
+    setLiked(car?.likedUsersId?.includes(registeredUserData?._id));
+  }, [registeredUserData]);
 
   const changeCarLike = () => {
     changeLiked({ carId: carInfo?.id, userId: registeredUserData?._id });
@@ -113,4 +120,4 @@ const CarInfo = ({ car }:CarInfoProps) => {
   );
 };
 
-export default CarInfo;
+export default React.memo(CarInfo);

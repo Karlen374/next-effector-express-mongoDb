@@ -29,13 +29,13 @@ const CreateAdvertisement = () => {
 
   useEffect(() => {
     if (selectedCar) {
+      getBrandsForAutocomplete(selectedCar.brand);
+      getModelsForAutocomplete(selectedCar.model);
       setReleaseYear(selectedCar.releaseYear);
       setPrice(String(selectedCar.price));
       setBrand(selectedCar.brand);
       setModel(selectedCar.model);
       setDescription(selectedCar.description);
-      getBrandsForAutocomplete(selectedCar.brand);
-      getModelsForAutocomplete(selectedCar.model);
     }
   }, []);
 
