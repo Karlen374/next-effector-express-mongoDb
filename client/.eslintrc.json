@@ -14,10 +14,9 @@
             "jsx": true
         },   
         "project": "./tsconfig.json",
-        "tsconfigRootDir": "client",   
+        "tsconfigRootDir": "client",
         "ecmaVersion": "latest",
-        "sourceType": "module"
-       
+        "sourceType": "module"       
     },
     "plugins": [
         "react",
@@ -35,7 +34,6 @@
         "arrow-body-style": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
         "linebreak-style": "off",
-        // "@typescript-eslint/no-unnecessary-type-assertion": 2,
         "no-plusplus": 0,
         "global-require": 0,
         "react/jsx-props-no-spreading": "off",
@@ -47,6 +45,9 @@
          "no-else-return":"off",
          "import/prefer-default-export": "off",
          "no-param-reassign": 0,
-         "no-useless-catch": 0
+         "no-useless-catch": 0,
+         "no-underscore-dangle":0,
+         "jsx-a11y/label-has-associated-control":0,
+         "import/no-anonymous-default-export": "off"
     }
 }

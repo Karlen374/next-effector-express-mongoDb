@@ -52,23 +52,3 @@ code {
   transform: scale(0.9);
   transition: opacity 1000ms, transform 1000ms;
 }
-
-.item-enter {
-  opacity: 0;
-}
-.item-enter-active {
-  opacity: 1;
-  transition: opacity 1000ms ease-in;
-}
-.item-exit {
-  opacity: 1;
-}
-.item-exit-active {
-  opacity: 0;
-  transition: opacity 1000ms ease-in;
-}
-
-
-.anim1{
-  opacity:0;
-}

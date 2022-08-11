@@ -1,0 +1,28 @@
+.Car_Photo{
+  &__Close{
+    margin-left: 90%;
+    cursor: pointer;
+    :hover{
+      color: rgb(180, 33, 33);
+    }
+  }
+  &__DropArea{
+    margin-top:20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:5px dashed black;
+    padding:60px 0;
+  }
+  &_Drop__DropArea{
+    margin-top:20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:5px dashed rgb(14, 88, 3);
+    padding:60px 0;
+  }
+  &__Upload{
+    display: none;
+  }
+}

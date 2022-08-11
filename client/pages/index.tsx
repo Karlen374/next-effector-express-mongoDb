@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useStore } from 'effector-react';
-import MainLayout from '../layouts/MainLayout';
-import CarList from '../components/carList/carList';
-import CarListHeader from '../components/carListHeader/carListHeader';
-import { loadCars } from '../models/cars/cars';
-import { $viewedCars } from '../models/viewedCars/viewedCars';
-import { ICar } from '../types/ICar';
+import CarListHeader from 'src/components/carListHeader/carListHeader';
+import CarList from 'src/components/carList/carList';
+import MainLayout from 'src/layouts/MainLayout';
+import { loadCars } from 'src/models/cars/cars';
+import { $viewedCars } from 'src/models/viewedCars/viewedCars';
+import { ICar } from 'src/types/ICar';
 
 export async function getStaticProps() {
   const res = await fetch('http://localhost:5000/api/cars');
@@ -36,7 +36,7 @@ const Index = ({ data }:IndexPage) => {
       </Head>
       <MainLayout>
         <CarListHeader />
-        <CarList data={viewedCars} />
+        <CarList cars={viewedCars} />
       </MainLayout>
     </>
   );

@@ -1,0 +1,37 @@
+.Items_Block{
+  display: flex;
+  justify-content:space-between;
+  &__Author{
+    text-decoration: underline;
+    cursor:pointer;   
+  }
+  a{
+    text-decoration: none;
+  }
+  &__Close{
+    margin-left: 90%;
+    cursor: pointer;
+    :hover{
+      color: rgb(180, 33, 33);
+    }
+  }
+  &__Photo{
+    display: table-cell;
+    vertical-align: middle;
+    background-color: rgb(139, 129, 129); 
+  }
+  &__Upload{
+    display: none;
+    span{
+      color:#1b5e20;
+    }
+  }
+}
+.Viewed{
+  background-color: rgb(70, 65, 65);
+}
+
+
+
+
+
